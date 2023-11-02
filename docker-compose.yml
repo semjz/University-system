@@ -6,7 +6,7 @@ services:
     image: postgres:14
     restart: unless-stopped
     volumes:
-      - "pyveng-db:/var/lib/postgresql/data"
+      - uni-db:/var/lib/postgresql/data
     env_file:
       - .env
     ports:
@@ -30,5 +30,5 @@ services:
       - "8000:8000"
 
 volumes:
-  pyveng-db:
-    name: pyveng-db
+  uni-db:
+    name: uni-db
