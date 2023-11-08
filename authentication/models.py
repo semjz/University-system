@@ -22,10 +22,12 @@ class User(AbstractUser):
     email = models.EmailField(_("email address"), blank=False)
 
     profile_image = models.ImageField("user_image")
-    phone_number = models.CharField(max_length=11, validators=[MinLengthValidator(11)], unique=True)
-    national_code = models.CharField(max_length=10, validators=[MinLengthValidator(10)], unique=True)
+    phone_number = models.CharField(_("phone number"), max_length=11, validators=[MinLengthValidator(11)]
+                                    , unique=True)
+    national_code = models.CharField(_("national code"), max_length=10, validators=[MinLengthValidator(10)]
+                                     , unique=True)
     gender = models.CharField(choices=GENDERS_CHOICES)
-    role = models.CharField(choices=ROLES_CHOICES, blank=True)
+    role = models.CharField(_("Role"), choices=ROLES_CHOICES, blank=True)
     birth_date = models.DateField(null=True, blank=True)
 
     objects = CustomUserManger()
