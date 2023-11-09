@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'university',
     'authentication',
+    'drf_yasg',
 
 ]
 
@@ -102,6 +103,18 @@ DATABASES = {
     }
 }
 
+# caching
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": os.getenv("REDIS_URL"),
+    }
+}
+
+CACHE_TTL = 60 * 5
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -143,6 +156,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 MEDIA_ROOT = os.getenv("MEDIA_ROOT")
 
 AUTH_USER_MODEL = 'authentication.User'
+
+SWAGGER_SETTINGS = {
+    'DEFAULT_INFO': 'university.urls.api_info',
+}
