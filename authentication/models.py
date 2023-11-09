@@ -1,5 +1,3 @@
-import uuid
-
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinLengthValidator
@@ -10,8 +8,8 @@ from django.utils.translation import gettext_lazy as _
 # Create your models here.
 class User(AbstractUser):
     GENDERS_CHOICES = [("male", "male"), ("female", "female")]
-    ROLES_CHOICES = [("Student", "Student"), ("Professor", "Professor"), ("Assistant", "Assistant")
-                     , ("It-manager", "It-manager")]
+    ROLES_CHOICES = [("student", "Student"), ("professor", "Professor"), ("assistant", "Assistant")
+                     , ("it-manager", "It-manager")]
 
     username = None
     user_id = models.CharField(max_length=8, validators=[MinLengthValidator(4)], unique=True
@@ -27,7 +25,7 @@ class User(AbstractUser):
     national_code = models.CharField(_("national code"), max_length=10, validators=[MinLengthValidator(10)]
                                      , unique=True)
     gender = models.CharField(choices=GENDERS_CHOICES)
-    role = models.CharField(_("Role"), choices=ROLES_CHOICES, blank=True)
+    role = models.CharField(_("role"), choices=ROLES_CHOICES, blank=True)
     birth_date = models.DateField(null=True, blank=True)
 
     objects = CustomUserManger()
