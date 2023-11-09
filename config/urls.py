@@ -11,11 +11,11 @@ schema_view = get_schema_view(
         description="Pyvengers University project's APIs",
     ),
     public=True,
-    permission_classes=[permissions.AllowAny]
+    permission_classes=[permissions.AllowAny]  # This should be changed to permitted users
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('test/', include('university.urls')),
+    # Here you should implement your app's urls
     path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
