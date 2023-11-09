@@ -11,7 +11,7 @@ from .serializers import RegisterSerializer, ChangePasswordSerializer
 from django.conf import settings
 from django.core.cache import cache
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
-import uuid
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 User = get_user_model()
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
@@ -41,7 +41,7 @@ class PasswordResetRequest(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request: Request):
-        reset_token = uuid.uuid4()
+        reset_token = PasswordResetTokenGenerator().make_token(request.user)
         if not cache.get(request.user.user_id):
             cache.set(request.user.user_id, reset_token, CACHE_TTL)
             return Response(f"reset-token: {cache.get(request.user.user_id)}", status=status.HTTP_200_OK)
