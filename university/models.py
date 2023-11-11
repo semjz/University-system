@@ -91,7 +91,7 @@ class Enrollment(models.Model):
 
 
 class DeleteTerm(models.Model):
-    terئ = models.ForeignKey(Term, on_delete=models.CASCADE)
+    term = models.ForeignKey(Term, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     result = models.CharField(choices=DELETE_TERM_STATUS, null=False, blank=False)
     student_comment = models.TextField()
