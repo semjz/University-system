@@ -25,6 +25,6 @@ class TermCourse(models.Model):
     exam_site = models.CharField(blank=False, null=False)
     capacity = models.PositiveIntegerField(blank=False, null=False, validators=(MinValueValidator(250),))
     course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=True, null=True)
-    # term = models.ForeignKey(Term, on_delete=models.CASCADE, blank=True, null=True)
+    # term = models.ForeignKey(Term, on_delete=models.CASCADE, blank=False, null=False)
     # professors = models.ManyToManyField(Professor)
 
