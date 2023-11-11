@@ -97,7 +97,6 @@ class DeleteTerm(models.Model):
 
 
 class StudyEnrollmentRequest(models.Model):
-    study_enrollment = models.AutoField(primary_key=True)
     student = models.ForeignKey('Student', on_delete=models.CASCADE)
     term = models.ForeignKey('Term', on_delete=models.CASCADE)
     school = models.ForeignKey('school', on_delete=models.CASCADE)
