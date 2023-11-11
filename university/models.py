@@ -56,6 +56,7 @@ class Field(models.Model):
 class Term(models.Model):
     students = models.ManyToManyField(to=Student, null=True, blank=True)
     professors = models.ManyToManyField(to='Professor', null=True, blank=True)
+    courses = models.ManyToManyField(to='Course', through='TermicCourse', null=True, blank=True)
     name = models.CharField(max_length=128, null=False, blank=False)
     take_course_start_time = jmodels.jDateTimeField(blank=True, null=True)
     take_course_end_time = jmodels.jDateTimeField(blank=True, null=True)
