@@ -8,6 +8,8 @@ markdown
 django-filter
 djangorestframework_simplejwt
 python-dotenv~=1.0.0
-django-redis
 django-jalali==6.0.1
 jdatetime==4.1.1
+Pillow
+django-redis
+drf_yasg
