@@ -23,6 +23,11 @@ COURSE_CONDITION_CHOICES = [
     ("passed", "passed"),
 ]
 
+DELETE_TERM_STATUS = [
+    ("deleted", "deleted"),
+    ("not_deleted", "not_deleted"),
+]
+
 
 class Student(models.Model):
     user = models.OneToOneField(to='User', on_delete=models.CASCADE, null=False, blank=False, primary_key=True)
@@ -82,3 +87,20 @@ class Enrollment(models.Model):
     taken_term = models.ForeignKey(to=Term, on_delete=models.CASCADE, null=True, blank=True)
     course_condition = models.CharField(choices=COURSE_CONDITION_CHOICES, null=False, blank=False)
     student_grade = models.IntegerField(null=True, blank=True)
+
+
+
+
+
+class DeleteTerm(models.Model):
+    term = models.ForeignKey(Term, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    result = models.CharField(choices=DELETE_TERM_STATUS, null=False, blank=False)
+    student_comment = models.TextField()
+    educational_deputy_comment = models.TextField()
+
+class StudyEnrollmentRequest(models.Model):
+    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    term = models.ForeignKey('Term', on_delete=models.CASCADE)
+    school = models.ForeignKey('school', on_delete=models.CASCADE)
+    file = models.FileField(upload_to='study_enrollment_files/')

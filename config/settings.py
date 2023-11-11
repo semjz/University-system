@@ -14,7 +14,6 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -42,19 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # external apps
     'rest_framework',
     'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist',
-    'university',
-    'authentication',
-    'drf_yasg',
-    'jdatetime',
-    'django_jalali',
-  
-    # internal apps
-    'university'
+    'rosetta'
 ]
 
 MIDDLEWARE = [
@@ -109,18 +98,6 @@ DATABASES = {
     }
 }
 
-# caching
-
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": os.getenv("REDIS_URL"),
-    }
-}
-
-CACHE_TTL = 60 * 5
-
-
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -161,11 +138,3 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-MEDIA_ROOT = os.getenv("MEDIA_ROOT")
-
-AUTH_USER_MODEL = 'authentication.User'
-
-SWAGGER_SETTINGS = {
-    'DEFAULT_INFO': 'university.urls.api_info',
-}
