@@ -3,24 +3,24 @@ from django.db.models import Avg, Count
 from django_jalali.db import models as jmodels
 
 MILITARY_STATUS_CHOICES = [
-    ("permanent_exemption", 0),
-    ("education_exemption", 1),
-    ("end_of_service", 2),
-    ("included", 3),
+    ("permanent_exemption", "permanent_exemption"),
+    ("education_exemption", "education_exemption"),
+    ("end_of_service", "end_of_service"),
+    ("included", "included"),
 ]
 ENTRANCE_TERM_CHOICES = [
-    ("Mehr", 1),
-    ("Bahman", 2),
+    ("Mehr", "Mehr"),
+    ("Bahman", "Bahman"),
 ]
 STAGE_CHOICES = [
-    ("associate", 0),
-    ("bachelor", 1),
-    ("master", 2),
-    ("phd", 3),
+    ("associate", "associate"),
+    ("bachelor", "bachelor"),
+    ("master", "master"),
+    ("phd", "phd"),
 ]
 COURSE_CONDITION_CHOICES = [
-    ("failed", 0),
-    ("passed", 1),
+    ("failed", "failed"),
+    ("passed", "passed"),
 ]
 
 
