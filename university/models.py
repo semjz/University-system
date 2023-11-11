@@ -70,7 +70,8 @@ class Term(models.Model):
     term_end_time = jmodels.jDateTimeField(blank=True, null=True)
 
 
-class EducationalDeputy(models.Model):
+class Assistant(models.Model):
+    user = models.OneToOneField(to='User', on_delete=models.CASCADE, null=False, blank=False, primary_key=True)
     school = models.OneToOneField(to='School', on_delete=models.CASCADE, null=False, blank=False)
     major = models.OneToOneField(to='Major', on_delete=models.CASCADE, null=False, blank=False)
 
