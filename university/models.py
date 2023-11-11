@@ -2,7 +2,6 @@ from django.db import models
 from django.db.models import Avg, Count
 from django_jalali.db import models as jmodels
 
-
 MILITARY_STATUS_CHOICES = [
     ("permanent_exemption", "permanent_exemption"),
     ("education_exemption", "education_exemption"),
@@ -88,13 +87,14 @@ class Enrollment(models.Model):
     student_grade = models.IntegerField(null=True, blank=True)
 
 
+
+
 class DeleteTerm(models.Model):
-    term = models.ForeignKey(Term, on_delete=models.CASCADE)
+    terئ = models.ForeignKey(Term, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     result = models.CharField(choices=DELETE_TERM_STATUS, null=False, blank=False)
     student_comment = models.TextField()
     educational_deputy_comment = models.TextField()
-
 
 class StudyEnrollmentRequest(models.Model):
     student = models.ForeignKey('Student', on_delete=models.CASCADE)
