@@ -16,7 +16,7 @@ class Course(models.Model):
                                        , related_name="post_courses")
     co_requisites = models.ForeignKey("self", on_delete=models.PROTECT, blank=True, null=True
                                       , related_name="co_courses")
-    # school = models.ManyToManyField(School)
+    # schools = models.ManyToManyField(School)
 
 
 class TermCourse(models.Model):
@@ -26,5 +26,5 @@ class TermCourse(models.Model):
     capacity = models.PositiveIntegerField(blank=False, null=False, validators=(MinValueValidator(250),))
     course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=True, null=True)
     # term = models.ForeignKey(Term, on_delete=models.CASCADE, blank=True, null=True)
-    # professor = models.ManyToManyField(Professor)
+    # professors = models.ManyToManyField(Professor)
 
