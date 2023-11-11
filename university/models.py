@@ -39,6 +39,7 @@ class Student(models.Model):
     entrance_term = models.CharField(choices=ENTRANCE_TERM_CHOICES, null=False, blank=False)
     military_status = models.CharField(choices=MILITARY_STATUS_CHOICES, null=False, blank=False)
     courses = models.ManyToManyField(to='Course', through='Enrollment', null=True, blank=True)
+    deleted_terms = models.ManyToManyField(to='Term', through='DeleteTerm', null=True, blank=True)
 
     @property
     def average_grade(self):
