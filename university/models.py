@@ -2,7 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Avg, Count
 from django_jalali.db import models as jmodels
-
+from django.contrib.auth.models import User
 
 COURSE_TYPES = [("general", "General"), ("specialized", "Specialized")
     , ("core", "Core"), ("optional", "Optional")]
@@ -128,3 +128,37 @@ class StudyEnrollmentRequest(models.Model):
     term = models.ForeignKey('Term', on_delete=models.CASCADE)
     school = models.ForeignKey('school', on_delete=models.CASCADE)
     file = models.FileField(upload_to='study_enrollment_files/')
+
+
+
+class ITManager(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+
+    def __str__(self):
+        return self.username
+
+class School(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
+class AddAndRemove(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    added_termic_course_id = models.ForeignKey('TermicCourse', on_delete=models.CASCADE)
+    removed_termic_course_id = models.ForeignKey('TermicCourse', on_delete=models.CASCADE)
+    status_id = models.ForeignKey(Status, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"AddAndRemove #{self.id}"
+
+
+class SelectUnit(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    termic_course_id = models.ForeignKey('TermicCourse', on_delete=models.CASCADE)
+    status = models.ForeignKey(Status, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"SelectUnit #{self.selection_id}"
