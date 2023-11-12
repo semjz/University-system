@@ -54,8 +54,8 @@ class Student(models.Model):
     major = models.ForeignKey(to='Major', on_delete=models.CASCADE, related_name="students")
     school = models.ForeignKey(to='School', on_delete=models.CASCADE, related_name="students")
     entrance_year = models.IntegerField()
-    entrance_term = models.CharField(choices=ENTRANCE_TERM_CHOICES)
-    military_status = models.CharField(choices=MILITARY_STATUS_CHOICES)
+    entrance_term = models.CharField(choices=ENTRANCE_TERM_CHOICES, max_length=6)
+    military_status = models.CharField(choices=MILITARY_STATUS_CHOICES, max_length=20)
     courses = models.ManyToManyField(to='Course', through='Enrollment', blank=True)
     deleted_terms = models.ManyToManyField(to='Term', through='DeleteTerm', blank=True)
 
@@ -77,7 +77,7 @@ class Professor(models.Model):
     past_courses = models.ManyToManyField(to='Course', blank=True)
     major = models.ForeignKey(to='Major', on_delete=models.CASCADE, related_name="professors")
     expertise = models.CharField(max_length=250, null=True, blank=True)
-    rank = models.CharField(choices=PROFESSOR_RANK_CHOICES, null=True, blank=True)
+    rank = models.CharField(choices=PROFESSOR_RANK_CHOICES, max_length=20 ,null=True, blank=True)
 
 
 class Course(models.Model):
@@ -121,7 +121,7 @@ class Major(models.Model):
     school = models.ForeignKey(to='School', on_delete=models.CASCADE, related_name="majors")
     name = models.CharField(max_length=128)
     units = models.IntegerField()
-    stage = models.CharField(choices=STAGE_CHOICES)
+    stage = models.CharField(choices=STAGE_CHOICES, max_length=9)
 
 
 class Assistant(models.Model):
@@ -137,14 +137,14 @@ class Enrollment(models.Model):
                                , related_name="enrollments")
     taken_term = models.ForeignKey(to='Term', on_delete=models.CASCADE, null=True, blank=True
                                    , related_name="enrollments")
-    course_condition = models.CharField(choices=COURSE_CONDITION_CHOICES)
+    course_condition = models.CharField(choices=COURSE_CONDITION_CHOICES, max_length=6)
     student_grade = models.IntegerField(null=True, blank=True)
 
 
 class DeleteTerm(models.Model):
     term = models.ForeignKey(Term, on_delete=models.CASCADE, related_name="delete_terms")
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="delete_terms")
-    result = models.CharField(choices=REQUEST_RESULT_CHOICES)
+    result = models.CharField(choices=REQUEST_RESULT_CHOICES, max_length=8, default="pending")
     student_comment = models.TextField()
     educational_deputy_comment = models.TextField()
 
@@ -176,7 +176,7 @@ class AddAndRemove(models.Model):
                                              , related_name="added_courses")
     removed_term_course_id = models.ForeignKey('TermCourse', on_delete=models.CASCADE
                                                , related_name="removed_courses")
-    status = models.CharField(choices=REQUEST_RESULT_CHOICES, default='pending')
+    status = models.CharField(choices=REQUEST_RESULT_CHOICES, max_length=8, default='pending')
 
     def __str__(self):
         return f"AddAndRemove #{self.id}"
@@ -185,7 +185,7 @@ class AddAndRemove(models.Model):
 class SelectUnit(models.Model):
     student = models.ForeignKey('Student', on_delete=models.CASCADE, related_name="selected_units")
     term_course_id = models.ForeignKey('TermCourse', on_delete=models.CASCADE, related_name="selected_units")
-    status = models.CharField(choices=REQUEST_RESULT_CHOICES, default='pending')
+    status = models.CharField(choices=REQUEST_RESULT_CHOICES, max_length=8, default='pending')
 
     def __str__(self):
         return f"SelectUnit #{self.id}"
