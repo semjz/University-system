@@ -77,13 +77,13 @@ class Professor(models.Model):
     past_courses = models.ManyToManyField(to='Course', blank=True)
     major = models.ForeignKey(to='Major', on_delete=models.CASCADE, related_name="professors")
     expertise = models.CharField(max_length=250, null=True, blank=True)
-    rank = models.CharField(choices=PROFESSOR_RANK_CHOICES, max_length=20 ,null=True, blank=True)
+    rank = models.CharField(choices=PROFESSOR_RANK_CHOICES, max_length=20, null=True, blank=True)
 
 
 class Course(models.Model):
     name = models.CharField(max_length=50)
     credits = models.FloatField(validators=(MinValueValidator(0),))
-    type = models.CharField(choices=COURSE_TYPES)
+    type = models.CharField(choices=COURSE_TYPES, max_length=11)
     pre_requisites = models.ForeignKey("self", on_delete=models.PROTECT, blank=True, null=True
                                        , related_name="post_courses")
     co_requisites = models.ForeignKey("self", on_delete=models.PROTECT, blank=True, null=True
@@ -202,7 +202,7 @@ class EmergencyCourseDropRequest(models.Model):
     student = models.ForeignKey(to='Student', on_delete=models.CASCADE, related_name="emergency_course_drop_request")
     course = models.ForeignKey(to='Course', on_delete=models.CASCADE, related_name="emergency_course_drop_request")
     request_date = jmodels.jDateTimeField(auto_now_add=True)
-    request_result = models.CharField(choices=REQUEST_RESULT_CHOICES, default='pending')
+    request_result = models.CharField(choices=REQUEST_RESULT_CHOICES, max_length=8, default='pending')
     student_explanation = models.TextField(null=True, blank=True)
     supervisor_explanation = models.TextField(null=True, blank=True)
 
