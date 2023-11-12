@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'drf_yasg',
     'university',
+    'authentication',
     'rosetta'
 ]
 
@@ -152,3 +153,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_ROOT = os.getenv("MEDIA_ROOT")
+
+AUTH_USER_MODEL = 'authentication.User'
+
+SWAGGER_SETTINGS = {
+    'DEFAULT_INFO': 'university.urls.api_info',
+}
