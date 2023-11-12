@@ -176,7 +176,7 @@ class AddAndRemove(models.Model):
                                              , related_name="added_courses")
     removed_term_course_id = models.ForeignKey('TermCourse', on_delete=models.CASCADE
                                                , related_name="removed_courses")
-    status = models.CharField(choices=REQUEST_RESULT_CHOICES)
+    status = models.CharField(choices=REQUEST_RESULT_CHOICES, default='pending')
 
     def __str__(self):
         return f"AddAndRemove #{self.id}"
@@ -185,7 +185,7 @@ class AddAndRemove(models.Model):
 class SelectUnit(models.Model):
     student = models.ForeignKey('Student', on_delete=models.CASCADE, related_name="selected_units")
     term_course_id = models.ForeignKey('TermCourse', on_delete=models.CASCADE, related_name="selected_units")
-    status = models.CharField(choices=REQUEST_RESULT_CHOICES)
+    status = models.CharField(choices=REQUEST_RESULT_CHOICES, default='pending')
 
     def __str__(self):
         return f"SelectUnit #{self.id}"
