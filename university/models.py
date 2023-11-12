@@ -1,6 +1,11 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Avg, Count
 from django_jalali.db import models as jmodels
+
+
+COURSE_TYPES = [("general", "General"), ("specialized", "Specialized")
+    , ("core", "Core"), ("optional", "Optional")]
 
 MILITARY_STATUS_CHOICES = [
     ("permanent_exemption", "permanent_exemption"),
@@ -21,6 +26,11 @@ STAGE_CHOICES = [
 COURSE_CONDITION_CHOICES = [
     ("failed", "failed"),
     ("passed", "passed"),
+]
+
+DELETE_TERM_STATUS = [
+    ("deleted", "deleted"),
+    ("not_deleted", "not_deleted"),
 ]
 
 
@@ -47,11 +57,15 @@ class Student(models.Model):
         return terms_count
 
 
-class Field(models.Model):
-    school = models.ForeignKey(to='School', on_delete=models.CASCADE, null=False, blank=False)
-    name = models.CharField(max_length=128, null=False, blank=False)
-    units = models.IntegerField(null=False, blank=False)
-    stage = models.CharField(choices=STAGE_CHOICES, null=False, blank=False)
+class Course(models.Model):
+    name = models.CharField(max_length=50, blank=False, null=False)
+    credits = models.FloatField(blank=False, null=False, validators=(MinValueValidator(0),))
+    type = models.CharField(choices=COURSE_TYPES, blank=False, null=False)
+    pre_requisites = models.ForeignKey("self", on_delete=models.PROTECT, blank=True, null=True
+                                       , related_name="post_courses")
+    co_requisites = models.ForeignKey("self", on_delete=models.PROTECT, blank=True, null=True
+                                      , related_name="co_courses")
+    # schools = models.ManyToManyField(School)
 
 
 class Term(models.Model):
@@ -70,7 +84,25 @@ class Term(models.Model):
     term_end_time = jmodels.jDateTimeField(blank=True, null=True)
 
 
-class EducationalDeputy(models.Model):
+class TermCourse(models.Model):
+    class_date_time = models.DateTimeField(blank=False, null=False)
+    exam_date_time = models.DateTimeField(blank=False, null=False)
+    exam_site = models.CharField(blank=False, null=False)
+    capacity = models.PositiveIntegerField(blank=False, null=False, validators=(MinValueValidator(250),))
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=True, null=True)
+    term = models.ForeignKey(Term, on_delete=models.CASCADE, blank=False, null=False)
+    # professors = models.ManyToManyField(Professor)
+
+
+class Field(models.Model):
+    school = models.ForeignKey(to='School', on_delete=models.CASCADE, null=False, blank=False)
+    name = models.CharField(max_length=128, null=False, blank=False)
+    units = models.IntegerField(null=False, blank=False)
+    stage = models.CharField(choices=STAGE_CHOICES, null=False, blank=False)
+
+
+class Assistant(models.Model):
+    user = models.OneToOneField(to='User', on_delete=models.CASCADE, null=False, blank=False, primary_key=True)
     school = models.OneToOneField(to='School', on_delete=models.CASCADE, null=False, blank=False)
     major = models.OneToOneField(to='Major', on_delete=models.CASCADE, null=False, blank=False)
 
@@ -81,3 +113,18 @@ class Enrollment(models.Model):
     taken_term = models.ForeignKey(to=Term, on_delete=models.CASCADE, null=True, blank=True)
     course_condition = models.CharField(choices=COURSE_CONDITION_CHOICES, null=False, blank=False)
     student_grade = models.IntegerField(null=True, blank=True)
+
+
+class DeleteTerm(models.Model):
+    term = models.ForeignKey(Term, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    result = models.CharField(choices=DELETE_TERM_STATUS, null=False, blank=False)
+    student_comment = models.TextField()
+    educational_deputy_comment = models.TextField()
+
+
+class StudyEnrollmentRequest(models.Model):
+    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    term = models.ForeignKey('Term', on_delete=models.CASCADE)
+    school = models.ForeignKey('school', on_delete=models.CASCADE)
+    file = models.FileField(upload_to='study_enrollment_files/')
