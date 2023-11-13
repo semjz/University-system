@@ -41,12 +41,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # external_apps
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_yasg',
+    'rosetta',
+    'celery',
+    'django_celery_results',
+    'django_celery_beat',
+
+    # internal_apps
     'university',
     'authentication',
-    'rosetta'
 ]
 
 MIDDLEWARE = [
@@ -146,6 +153,20 @@ MEDIA_ROOT = os.getenv("MEDIA_ROOT")
 
 AUTH_USER_MODEL = 'authentication.User'
 
+
+# Swagger Settings
 SWAGGER_SETTINGS = {
     'DEFAULT_INFO': 'university.urls.api_info',
 }
+
+# Celery Settings
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Tehran'
+
+CELERY_RESULT_BACKEND = 'django-db'
+
+# Celery Beat Settings
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'

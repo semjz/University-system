@@ -19,5 +19,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Here you should implement your app's urls
     path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('users/', include('authentication.urls'))
+    path('users/', include('authentication.urls')),
+    path('', include('university.urls')),
 ]
