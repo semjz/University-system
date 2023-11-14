@@ -3,49 +3,9 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Avg, Count
 from django_jalali.db import models as jmodels
 from django.contrib.auth import get_user_model
+from .choices import *
 
 User = get_user_model()
-
-COURSE_TYPES = [
-    ("general", "General"),
-    ("specialized", "Specialized"),
-    ("core", "Core"),
-    ("optional", "Optional")
-]
-
-MILITARY_STATUS_CHOICES = [
-    ("permanent_exemption", "Permanent Exemption"),
-    ("education_exemption", "Education Exemption"),
-    ("end_of_service", "End of Service"),
-    ("included", "Included"),
-]
-ENTRANCE_TERM_CHOICES = [
-    ("Mehr", "Mehr"),
-    ("Bahman", "Bahman"),
-]
-STAGE_CHOICES = [
-    ("associate", "Associate"),
-    ("bachelor", "Bachelor"),
-    ("master", "Master"),
-    ("phd", "PHD"),
-]
-COURSE_CONDITION_CHOICES = [
-    ("failed", "Failed"),
-    ("passed", "Passed"),
-]
-
-PROFESSOR_RANK_CHOICES = [
-    ('instructor', 'Instructor'),  # morabi
-    ('assistant_professor', 'Assistant Professor'),  # ostadyar
-    ('associate_professor', 'Associate Professor'),  # daneshyar
-    ('full_professor', 'Full Professor'),  # ostad tamam
-]
-
-REQUEST_RESULT_CHOICES = [
-    ('approved', 'Approved'),
-    ('rejected', 'Rejected'),
-    ('pending', 'Pending'),
-]
 
 
 class Student(models.Model):
@@ -53,7 +13,7 @@ class Student(models.Model):
     supervisor = models.ForeignKey(to='Professor', on_delete=models.CASCADE, null=True, blank=True)
     major = models.ForeignKey(to='Major', on_delete=models.CASCADE, related_name="students")
     school = models.ForeignKey(to='School', on_delete=models.CASCADE, related_name="students")
-    entrance_year = models.IntegerField()
+    entrance_year = models.IntegerField(validators=(MinValueValidator(1402),))
     entrance_term = models.CharField(choices=ENTRANCE_TERM_CHOICES, max_length=6)
     military_status = models.CharField(choices=MILITARY_STATUS_CHOICES, max_length=20)
     courses = models.ManyToManyField(to='Course', through='Enrollment', blank=True)
@@ -122,6 +82,9 @@ class Major(models.Model):
     name = models.CharField(max_length=128)
     units = models.IntegerField()
     stage = models.CharField(choices=STAGE_CHOICES, max_length=9)
+
+    def __str__(self):
+        return self.name
 
 
 class Assistant(models.Model):
