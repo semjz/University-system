@@ -24,7 +24,7 @@ class CustomUserManger(UserManager):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
-        extra_fields.setdefault("role", "It-manager")
+        extra_fields.setdefault("role", "it-manager")
         user_id = ''.join(secrets.choice(string.digits) for _ in range(4))
 
         if extra_fields.get("is_staff") is not True:
