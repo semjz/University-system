@@ -6,7 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import get_user_model
-from .serializers import RegisterSerializer, ChangePasswordSerializer
+from .serializers import CreatUserSerializer, ChangePasswordSerializer
 from django.conf import settings
 from django.core.cache import cache
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
@@ -39,7 +39,7 @@ class LogoutView(APIView):
 class RegisterView(CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
-    serializer_class = RegisterSerializer
+    serializer_class = CreatUserSerializer
 
 
 class PasswordResetRequest(APIView):
