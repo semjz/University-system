@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import RegisterView, LogoutView, PasswordResetRequest, PasswordResetAction, TestView
+from .views import LogoutView, PasswordResetRequest, PasswordResetAction, TestView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView
