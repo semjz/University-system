@@ -13,7 +13,7 @@ class Student(models.Model):
     supervisor = models.ForeignKey(to='Professor', on_delete=models.CASCADE, null=True, blank=True)
     major = models.ForeignKey(to='Major', on_delete=models.CASCADE, related_name="students")
     school = models.ForeignKey(to='School', on_delete=models.CASCADE, related_name="students")
-    entrance_year = models.IntegerField(validators=(MinValueValidator(1402),))
+    entrance_year = models.IntegerField()
     entrance_term = models.CharField(choices=ENTRANCE_TERM_CHOICES, max_length=6)
     military_status = models.CharField(choices=MILITARY_STATUS_CHOICES, max_length=20)
     courses = models.ManyToManyField(to='Course', through='Enrollment', blank=True)

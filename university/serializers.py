@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import Student
-from authentication.serializers import CreatUserSerializer
+from authentication.serializers import CreateUserSerializer
 import string
 import secrets
 
@@ -15,7 +15,7 @@ def create_student_id(entrance_year, entrance_term):
 
 
 class CreatStudentSerializer(serializers.ModelSerializer):
-    user = CreatUserSerializer()
+    user = CreateUserSerializer()
 
     class Meta:
         model = Student

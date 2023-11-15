@@ -8,7 +8,7 @@ import string
 User = get_user_model()
 
 
-class CreatUserSerializer(serializers.ModelSerializer):
+class CreateUserSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(max_length=128, required=True, write_only=True)
 
     class Meta:
