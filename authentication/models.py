@@ -22,7 +22,7 @@ class User(AbstractUser):
                                     , unique=True)
     national_code = models.CharField(_("national code"), max_length=10, validators=[MinLengthValidator(10)]
                                      , unique=True)
-    gender = models.CharField(choices=GENDERS_CHOICES)
+    gender = models.CharField(choices=GENDERS_CHOICES, max_length=10)
     role = models.CharField(_("role"), choices=ROLES_CHOICES, blank=True)
     birth_date = models.DateField(null=True, blank=True)
 
