@@ -10,9 +10,9 @@ User = get_user_model()
 
 class Student(models.Model):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, primary_key=True)
-    supervisor = models.ForeignKey(to='Professor', on_delete=models.CASCADE, null=True, blank=True)
-    major = models.ForeignKey(to='Major', on_delete=models.CASCADE, related_name="students")
-    school = models.ForeignKey(to='School', on_delete=models.CASCADE, related_name="students")
+    supervisor = models.ForeignKey(to='Professor', on_delete=models.PROTECT, null=True, blank=True)
+    major = models.ForeignKey(to='Major', on_delete=models.PROTECT, related_name="students")
+    school = models.ForeignKey(to='School', on_delete=models.PROTECT, related_name="students")
     entrance_year = models.IntegerField(validators=(MinValueValidator(1402),))
     entrance_term = models.CharField(choices=ENTRANCE_TERM_CHOICES, max_length=6)
     military_status = models.CharField(choices=MILITARY_STATUS_CHOICES, max_length=20)
@@ -33,9 +33,9 @@ class Student(models.Model):
 
 class Professor(models.Model):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, primary_key=True)
-    school = models.ForeignKey(to='School', on_delete=models.CASCADE, related_name="professors")
+    school = models.ForeignKey(to='School', on_delete=models.PROTECT, related_name="professors")
     past_courses = models.ManyToManyField(to='Course', blank=True)
-    major = models.ForeignKey(to='Major', on_delete=models.CASCADE, related_name="professors")
+    major = models.ForeignKey(to='Major', on_delete=models.PROTECT, related_name="professors")
     expertise = models.CharField(max_length=250, null=True, blank=True)
     rank = models.CharField(choices=PROFESSOR_RANK_CHOICES, max_length=20, null=True, blank=True)
 
@@ -89,8 +89,8 @@ class Major(models.Model):
 
 class Assistant(models.Model):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, primary_key=True)
-    school = models.OneToOneField(to='School', on_delete=models.CASCADE)
-    major = models.OneToOneField(to='Major', on_delete=models.CASCADE)
+    school = models.OneToOneField(to='School', on_delete=models.PROTECT)
+    major = models.OneToOneField(to='Major', on_delete=models.PROTECT)
 
 
 class Enrollment(models.Model):
