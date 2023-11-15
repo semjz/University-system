@@ -1,13 +1,12 @@
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.views import APIView
-from rest_framework.generics import CreateAPIView, UpdateAPIView
+from rest_framework.generics import UpdateAPIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import get_user_model
-from .serializers import CreateUserSerializer, ChangePasswordSerializer
+from .serializers import ChangePasswordSerializer
 from django.conf import settings
 from django.core.cache import cache
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
@@ -31,12 +30,6 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class RegisterView(CreateAPIView):
-    queryset = User.objects.all()
-    permission_classes = (AllowAny,)
-    serializer_class = CreateUserSerializer
-
-
 class PasswordResetRequest(APIView):
     permission_classes = (IsAuthenticated,)
 
@@ -55,10 +48,5 @@ class PasswordResetAction(UpdateAPIView):
     serializer_class = ChangePasswordSerializer
 
 
-class TestView(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request):
-        return Response("test", status=status.HTTP_200_OK)
 
 
