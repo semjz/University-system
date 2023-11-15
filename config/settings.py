@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'drf_yasg',
+    'drf_spectacular',
     'university',
     'authentication',
     'rosetta'
@@ -81,6 +81,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
 }
 
 WSGI_APPLICATION = 'config.wsgi.application'
@@ -100,6 +101,17 @@ DATABASES = {
         'PORT': os.getenv('POSTGRES_PORT', default='5432'),
     }
 }
+
+# caching
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": os.getenv("REDIS_URL"),
+    }
+}
+
+CACHE_TTL = 60 * 5
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -146,6 +158,10 @@ MEDIA_ROOT = os.getenv("MEDIA_ROOT")
 
 AUTH_USER_MODEL = 'authentication.User'
 
-SWAGGER_SETTINGS = {
-    'DEFAULT_INFO': 'university.urls.api_info',
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'University',
+    'DESCRIPTION': 'University management system',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
+

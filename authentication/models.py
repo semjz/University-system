@@ -3,16 +3,14 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinLengthValidator
 from .managers import CustomUserManger
 from django.utils.translation import gettext_lazy as _
+from .choices import *
 
 
 # Create your models here.
 class User(AbstractUser):
-    GENDERS_CHOICES = [("male", "male"), ("female", "female")]
-    ROLES_CHOICES = [("student", "Student"), ("professor", "Professor"), ("assistant", "Assistant")
-                     , ("it-manager", "It-manager")]
 
     username = None
-    user_id = models.CharField(max_length=8, validators=[MinLengthValidator(4)], unique=True
+    user_id = models.CharField(max_length=12, validators=[MinLengthValidator(4)], unique=True
                                , blank=True, null=True)
 
     first_name = models.CharField(_("first name"), max_length=150, blank=False)
@@ -31,7 +29,7 @@ class User(AbstractUser):
     objects = CustomUserManger()
 
     USERNAME_FIELD = "user_id"
-    REQUIRED_FIELDS = ["email", "first_name", "last_name", "national_code", "phone_number", "role"]
+    REQUIRED_FIELDS = ["email", "first_name", "last_name", "national_code", "phone_number"]
 
     def __str__(self):
         return str(self.username)

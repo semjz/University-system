@@ -3,49 +3,9 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Avg, Count
 from django_jalali.db import models as jmodels
 from django.contrib.auth import get_user_model
+from .choices import *
 
 User = get_user_model()
-
-COURSE_TYPES = [
-    ("general", "General"),
-    ("specialized", "Specialized"),
-    ("core", "Core"),
-    ("optional", "Optional")
-]
-
-MILITARY_STATUS_CHOICES = [
-    ("permanent_exemption", "Permanent Exemption"),
-    ("education_exemption", "Education Exemption"),
-    ("end_of_service", "End of Service"),
-    ("included", "Included"),
-]
-ENTRANCE_TERM_CHOICES = [
-    ("Mehr", "Mehr"),
-    ("Bahman", "Bahman"),
-]
-STAGE_CHOICES = [
-    ("associate", "Associate"),
-    ("bachelor", "Bachelor"),
-    ("master", "Master"),
-    ("phd", "PHD"),
-]
-COURSE_CONDITION_CHOICES = [
-    ("failed", "Failed"),
-    ("passed", "Passed"),
-]
-
-PROFESSOR_RANK_CHOICES = [
-    ('instructor', 'Instructor'),  # morabi
-    ('assistant_professor', 'Assistant Professor'),  # ostadyar
-    ('associate_professor', 'Associate Professor'),  # daneshyar
-    ('full_professor', 'Full Professor'),  # ostad tamam
-]
-
-REQUEST_RESULT_CHOICES = [
-    ('approved', 'Approved'),
-    ('rejected', 'Rejected'),
-    ('pending', 'Pending'),
-]
 
 
 class Student(models.Model):
@@ -122,6 +82,9 @@ class Major(models.Model):
     name = models.CharField(max_length=128)
     units = models.IntegerField()
     stage = models.CharField(choices=STAGE_CHOICES, max_length=9)
+
+    def __str__(self):
+        return self.name
 
 
 class Assistant(models.Model):

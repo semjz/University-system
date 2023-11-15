@@ -8,7 +8,7 @@ import string
 User = get_user_model()
 
 
-class RegisterSerializer(serializers.ModelSerializer):
+class CreateUserSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(max_length=128, required=True, write_only=True)
 
     class Meta:
@@ -28,7 +28,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop("confirm_password")
-        validated_data["user_id"] = ''.join(secrets.choice(string.digits) for _ in range(4))
         user = User.objects.create_user(
             **validated_data
         )
