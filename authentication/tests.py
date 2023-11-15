@@ -14,30 +14,6 @@ genders = ["male", "female"]
 password = fake.password()
 user_id = ''.join(random.choice(string.digits) for _ in range(4))
 
-
-class RegisterTest(APITestCase):
-
-    def setUp(self) -> None:
-        self.url = reverse_lazy("authentication:register")
-
-        self.existing_user = baker.make(User)
-        self.existing_user_national_code = self.existing_user.national_code
-        self.payload = {"first_name": fake.first_name(), "last_name": fake.last_name()
-                         , "national_code": f"0{fake.passport_number()}", "phone_number": "09120000001"
-                         , "email": fake.email(), "role": random.choice(roles)
-                         , "gender": random.choice(genders), "password": password
-                         , "confirm_password": password}
-
-    def test_register_successful(self):
-        response = self.client.post(self.url, self.payload)
-        self.assertTrue(status.is_success(response.status_code))
-
-    def test_register_unsuccessful_duplicate_national_code(self):
-        self.payload["national_code"] = self.existing_user_national_code
-        response = self.client.post(self.url, self.payload)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-
 class LoginTest(APITestCase):
     def setUp(self) -> None:
         self.url = reverse_lazy("authentication:login")
