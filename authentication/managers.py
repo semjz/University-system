@@ -1,6 +1,7 @@
 from django.contrib.auth.models import UserManager
 from django.utils.translation import gettext_lazy as g
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import Group
 
 import secrets
 import string
@@ -18,13 +19,15 @@ class CustomUserManger(UserManager):
         user = self.model(user_id=user_id, email=email, **extra_fields)
         user.password = make_password(password)
         user.save(using=self._db)
+        group = Group.objects.get(name=role)
+        user.groups.add(group)
         return user
 
     def create_superuser(self, user_id, email=None, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
-        extra_fields.setdefault("role", "it-manager")
+        extra_fields.setdefault("role", "IT Manager")
         user_id = ''.join(secrets.choice(string.digits) for _ in range(4))
 
         if extra_fields.get("is_staff") is not True:
