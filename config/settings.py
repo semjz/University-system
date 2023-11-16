@@ -45,11 +45,11 @@ INSTALLED_APPS = [
     # external_apps
     'rest_framework',
     'rest_framework_simplejwt',
-    'drf_yasg',
     'rosetta',
     'celery',
     'django_celery_results',
     'django_celery_beat',
+    'drf_spectacular'
 
     # internal_apps
     'university',
@@ -88,6 +88,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
 }
 
 WSGI_APPLICATION = 'config.wsgi.application'
@@ -107,6 +108,17 @@ DATABASES = {
         'PORT': os.getenv('POSTGRES_PORT', default='5432'),
     }
 }
+
+# caching
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": os.getenv("REDIS_URL"),
+    }
+}
+
+CACHE_TTL = 60 * 5
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -170,3 +182,12 @@ CELERY_RESULT_BACKEND = 'django-db'
 
 # Celery Beat Settings
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'University',
+    'DESCRIPTION': 'University management system',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
+
+
