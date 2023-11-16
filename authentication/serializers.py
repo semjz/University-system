@@ -77,4 +77,3 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
 class LogoutSerializer(serializers.Serializer):
     refresh = serializers.CharField(max_length=200)
-    
