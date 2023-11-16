@@ -25,6 +25,6 @@ class CreatStudentSerializer(serializers.ModelSerializer):
         user_data = validated_data.pop("user")
         user_data["user_id"] = create_student_id(validated_data["entrance_year"]
                                                  , validated_data["entrance_term"])
-        user = CreatUserSerializer().create(user_data)
+        user = CreateUserSerializer().create(user_data)
         student = Student.objects.create(user=user, **validated_data)
         return student
