@@ -13,4 +13,5 @@ django_jalali
 drf_yasg
 django-redis
 Pillow
+celery~=5.3.5
 drf_spectacular
