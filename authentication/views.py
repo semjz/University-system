@@ -1,5 +1,4 @@
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView, UpdateAPIView
@@ -12,6 +11,12 @@ from django.conf import settings
 from django.core.cache import cache
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+
+from rest_framework import generics
+from rest_framework.filters import SearchFilter
+from .models import Assistant
+from .serializers import AssistantSerializer
+
 
 User = get_user_model()
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
@@ -62,3 +67,15 @@ class TestView(APIView):
         return Response("test", status=status.HTTP_200_OK)
 
 
+
+class AssistantListCreateView(generics.ListCreateAPIView):
+    queryset = Assistant.objects.all()
+    serializer_class = AssistantSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['first_name', 'last_name', 'employee_number', 'national_code', 'faculty', 'field']
+
+class AssistantListView(generics.ListAPIView):
+    queryset = Assistant.objects.all()
+    serializer_class = AssistantSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['first_name', 'last_name', 'employee_number', 'national_code', 'faculty', 'field']

@@ -4,9 +4,17 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.cache import cache
 import secrets
 import string
-
+from .models import Assistant
 User = get_user_model()
 
+# serializers.py
+
+
+
+class AssistantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Assistant
+        fields = '__all__'
 
 class RegisterSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(max_length=128, required=True, write_only=True)

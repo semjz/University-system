@@ -101,3 +101,5 @@ class StudyEnrollmentRequest(models.Model):
     term = models.ForeignKey('Term', on_delete=models.CASCADE)
     school = models.ForeignKey('school', on_delete=models.CASCADE)
     file = models.FileField(upload_to='study_enrollment_files/')
+
+
