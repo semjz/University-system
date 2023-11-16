@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'celery',
     'django_celery_results',
     'django_celery_beat',
-    'drf_spectacular'
+    'drf_spectacular',
+    'rolepermissions'
 
     # internal_apps
     'university',
@@ -190,4 +191,4 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
 }
 
-
+ROLEPERMISSIONS_MODULE = "authentication.roles"
