@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 class User(AbstractUser):
     GENDERS_CHOICES = [("male", "male"), ("female", "female")]
     ROLES_CHOICES = [("student", "Student"), ("professor", "Professor"), ("assistant", "Assistant")
-                     , ("it-manager", "It-manager")]
+        , ("it-manager", "It-manager")]
 
     username = None
     user_id = models.CharField(max_length=8, validators=[MinLengthValidator(4)], unique=True
@@ -35,3 +35,14 @@ class User(AbstractUser):
 
     def __str__(self):
         return str(self.username)
+
+class Assistant(models.Model):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    employee_number = models.CharField(max_length=20, unique=True)
+    national_code = models.CharField(max_length=20, unique=True)
+    faculty = models.CharField(max_length=255)
+    field = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
