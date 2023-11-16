@@ -24,6 +24,7 @@ CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
+    serializer_class = LogoutSerializer
 
     def post(self, request:Request):
         try:
@@ -33,6 +34,7 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
 
         except Exception as e:
+            error_message = {'error': str(e)}
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
