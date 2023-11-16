@@ -9,8 +9,6 @@ User = get_user_model()
 
 # serializers.py
 
-
-
 class AssistantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assistant

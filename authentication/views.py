@@ -66,8 +66,6 @@ class TestView(APIView):
     def get(self, request):
         return Response("test", status=status.HTTP_200_OK)
 
-
-
 class AssistantListCreateView(generics.ListCreateAPIView):
     queryset = Assistant.objects.all()
     serializer_class = AssistantSerializer
