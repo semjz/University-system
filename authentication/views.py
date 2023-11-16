@@ -6,7 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import get_user_model
-from .serializers import ChangePasswordSerializer
+from .serializers import ChangePasswordSerializer, LogoutSerializer
 from django.conf import settings
 from django.core.cache import cache
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
@@ -29,7 +29,7 @@ class LogoutView(APIView):
 
         except Exception as e:
             error_message = {'error': str(e)}
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PasswordResetRequest(APIView):
