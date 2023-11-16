@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'django_celery_results',
     'django_celery_beat',
     'drf_spectacular',
-    'rolepermissions'
+    'rolepermissions',
 
     # internal_apps
     'university',
