@@ -68,3 +68,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
+class LogoutSerializer(serializers.Serializer):
+    refresh = serializers.CharField(max_length=200)
+    
