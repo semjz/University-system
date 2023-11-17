@@ -22,8 +22,8 @@ class User(AbstractUser):
                                     , unique=True)
     national_code = models.CharField(_("national code"), max_length=10, validators=[MinLengthValidator(10)]
                                      , unique=True)
-    gender = models.CharField(choices=GENDERS_CHOICES)
-    role = models.CharField(_("role"), choices=ROLES_CHOICES, blank=True)
+    gender = models.CharField(choices=GENDERS_CHOICES, max_length=10)
+    role = models.CharField(_("role"), choices=ROLES_CHOICES,  max_length=20)
     birth_date = models.DateField(null=True, blank=True)
 
     objects = CustomUserManger()

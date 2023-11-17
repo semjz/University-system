@@ -10,8 +10,10 @@ djangorestframework_simplejwt
 python-dotenv~=1.0.0
 django-rosetta
 django_jalali
-drf_yasg
 django-redis
 Pillow
 celery~=5.3.5
+django-celery-results
+django_celery_beat
 drf_spectacular
+django-role-permissions

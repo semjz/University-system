@@ -6,7 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import get_user_model
-from .serializers import ChangePasswordSerializer
+from .serializers import ChangePasswordSerializer, LogoutSerializer
 from django.conf import settings
 from django.core.cache import cache
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
@@ -18,6 +18,7 @@ CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
+    serializer_class = LogoutSerializer
 
     def post(self, request:Request):
         try:
@@ -27,7 +28,8 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
 
         except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            error_message = {'error': str(e)}
+            return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PasswordResetRequest(APIView):

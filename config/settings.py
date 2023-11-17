@@ -45,11 +45,13 @@ INSTALLED_APPS = [
     # external_apps
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'rosetta',
     'celery',
     'django_celery_results',
     'django_celery_beat',
-    'drf_spectacular'
+    'drf_spectacular',
+    'rolepermissions',
 
     # internal_apps
     'university',
@@ -190,4 +192,4 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
 }
 
-
+ROLEPERMISSIONS_MODULE = "authentication.roles"
