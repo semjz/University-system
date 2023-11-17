@@ -12,8 +12,8 @@ MILITARY_STATUS_CHOICES = [
     ("included", "Included"),
 ]
 ENTRANCE_TERM_CHOICES = [
-    ("Mehr", "Mehr"),
-    ("Bahman", "Bahman"),
+    ("mehr", "Mehr"),
+    ("bahman", "Bahman"),
 ]
 STAGE_CHOICES = [
     ("associate", "Associate"),

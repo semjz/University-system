@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Student
+from .choices import ENTRANCE_TERM_CHOICES
+from .models import Student, Term, Course
 from authentication.serializers import CreateUserSerializer
 import string
 import secrets
@@ -14,7 +15,7 @@ def create_student_id(entrance_year, entrance_term):
     return f"{entrance_year}{term[entrance_term]}{unique_id}"
 
 
-class CreatStudentSerializer(serializers.ModelSerializer):
+class CreateStudentSerializer(serializers.ModelSerializer):
     user = CreateUserSerializer()
 
     class Meta:
@@ -25,6 +26,41 @@ class CreatStudentSerializer(serializers.ModelSerializer):
         user_data = validated_data.pop("user")
         user_data["user_id"] = create_student_id(validated_data["entrance_year"]
                                                  , validated_data["entrance_term"])
-        user = CreatUserSerializer().create(user_data)
+        user = CreateUserSerializer().create(user_data)
         student = Student.objects.create(user=user, **validated_data)
         return student
+
+
+class TermSerializer(serializers.ModelSerializer):
+    year = serializers.IntegerField(write_only=True)
+    term_type = serializers.ChoiceField(choices=ENTRANCE_TERM_CHOICES, write_only=True)
+    name = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = Term
+        # exclude = ['name']
+        fields = '__all__'
+
+    def validate_year(self, year):
+        if year >= 1370:
+            return year
+
+    def create(self, validated_data):
+        name = validated_data.get('term_type') + str(validated_data.get('year'))
+        validated_data.pop('year')
+        validated_data.pop('term_type')
+        validated_data['name'] = name
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        name = validated_data.get('term_type') + str(validated_data.get('year'))
+        validated_data.pop('year')
+        validated_data.pop('term_type')
+        validated_data['name'] = name
+        return super().update(instance, validated_data)
+
+
+class CourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = '__all__'

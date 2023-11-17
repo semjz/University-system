@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 import os
+from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -49,7 +50,7 @@ INSTALLED_APPS = [
     'celery',
     'django_celery_results',
     'django_celery_beat',
-    'drf_spectacular'
+    'drf_spectacular',
 
     # internal_apps
     'university',
@@ -190,4 +191,6 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
 }
 
-
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30)
+}

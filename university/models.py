@@ -27,7 +27,7 @@ class Student(models.Model):
 
     @property
     def sanavat(self):
-        terms_count = Term.objects.filter(student=self).aggregate(term_count=Count('id'))['term_count']
+        terms_count = Term.objects.filter(student=self).aggregate(term_count=Count('name'))['term_count']
         return terms_count
 
 
@@ -52,24 +52,24 @@ class Course(models.Model):
 
 
 class Term(models.Model):
+    name = models.CharField(max_length=128, unique=True)
     students = models.ManyToManyField(to=Student, blank=True)
     professors = models.ManyToManyField(to='Professor', blank=True)
     courses = models.ManyToManyField(to='Course', through='TermCourse', blank=True)
-    name = models.CharField(max_length=128)
-    take_course_start_time = jmodels.jDateTimeField(blank=True, null=True)
-    take_course_end_time = jmodels.jDateTimeField(blank=True, null=True)
-    class_start_time = jmodels.jDateTimeField(blank=True, null=True)
-    class_end_time = jmodels.jDateTimeField(blank=True, null=True)
-    fix_course_start_time = jmodels.jDateTimeField(blank=True, null=True)
-    fix_course_end_time = jmodels.jDateTimeField(blank=True, null=True)
-    emergency_removal_end_time = jmodels.jDateTimeField(blank=True, null=True)
-    exam_start_time = jmodels.jDateTimeField(blank=True, null=True)
-    term_end_time = jmodels.jDateTimeField(blank=True, null=True)
+    take_course_start_time = models.DateTimeField(blank=True, null=True)
+    take_course_end_time = models.DateTimeField(blank=True, null=True)
+    class_start_time = models.DateField(blank=True, null=True)
+    class_end_time = models.DateField(blank=True, null=True)
+    fix_course_start_time = models.DateTimeField(blank=True, null=True)
+    fix_course_end_time = models.DateTimeField(blank=True, null=True)
+    emergency_removal_end_time = models.DateTimeField(blank=True, null=True)
+    exam_start_time = models.DateField(blank=True, null=True)
+    term_end_time = models.DateField(blank=True, null=True)
 
 
 class TermCourse(models.Model):
-    class_date_time = jmodels.jDateTimeField()
-    exam_date_time = jmodels.jDateTimeField()
+    class_date_time = models.DateTimeField()
+    exam_date_time = models.DateTimeField()
     exam_site = models.CharField()
     capacity = models.PositiveIntegerField(validators=(MaxValueValidator(250),))
     course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=True, null=True)
@@ -164,7 +164,7 @@ class GradeRevisionRequest(models.Model):
 class EmergencyCourseDropRequest(models.Model):
     student = models.ForeignKey(to='Student', on_delete=models.CASCADE, related_name="emergency_course_drop_request")
     course = models.ForeignKey(to='Course', on_delete=models.CASCADE, related_name="emergency_course_drop_request")
-    request_date = jmodels.jDateTimeField(auto_now_add=True)
+    request_date = models.DateTimeField(auto_now_add=True)
     request_result = models.CharField(choices=REQUEST_RESULT_CHOICES, max_length=8, default='pending')
     student_explanation = models.TextField(null=True, blank=True)
     supervisor_explanation = models.TextField(null=True, blank=True)
