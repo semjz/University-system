@@ -13,7 +13,7 @@ class User(AbstractUser):
                                , blank=True, null=True)
 
     first_name = models.CharField(_("first name"), max_length=150)
-    last_name = models.CharField(_("last name"), max_length=150)
+    last_name = models.CharField(_("last name"), max_length=150, unique=True)
     email = models.EmailField(_("email address"))
 
     profile_image = models.ImageField("user_image")
@@ -29,7 +29,6 @@ class User(AbstractUser):
 
     USERNAME_FIELD = "user_id"
     REQUIRED_FIELDS = ["email", "first_name", "last_name", "national_code", "phone_number"]
-
 
     def __str__(self):
         return str(self.username)
