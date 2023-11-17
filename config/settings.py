@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'drf_spectacular',
     'rolepermissions',
+    'django_filters',
 
     # internal_apps
     'university',
@@ -91,7 +92,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 WSGI_APPLICATION = 'config.wsgi.application'
