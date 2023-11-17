@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 import os
+from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -193,3 +194,7 @@ SPECTACULAR_SETTINGS = {
 }
 
 ROLEPERMISSIONS_MODULE = "authentication.roles"
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+}
