@@ -28,3 +28,22 @@ class CreatStudentSerializer(serializers.ModelSerializer):
         user = CreateUserSerializer().create(user_data)
         student = Student.objects.create(user=user, **validated_data)
         return student
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop("user")
+
+        for field, value in validated_data.items():
+            setattr(instance, field, value)
+
+        instance.save()
+
+        user_instance = instance.user
+        for field, value in user_data.items():
+            if field == "password":
+                instance.password = user_instance.set_password(value)
+            else:
+                setattr(user_instance, field, value)
+
+        user_instance.save()
+
+        return instance
