@@ -26,3 +26,5 @@ class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     permission_classes = [IsAuthenticated, IsItManager | IsAssistant]
+
+    http_method_names = ['get', 'post', 'put', 'patch', 'delete']
