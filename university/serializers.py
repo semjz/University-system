@@ -4,6 +4,8 @@ from .models import Student
 from authentication.serializers import CreateUserSerializer
 import string
 import secrets
+from rest_framework import serializers
+from .models import ITManager
 
 User = get_user_model()
 
@@ -28,3 +30,9 @@ class CreatStudentSerializer(serializers.ModelSerializer):
         user = CreateUserSerializer().create(user_data)
         student = Student.objects.create(user=user, **validated_data)
         return student
+
+
+class ITmanagerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ITManager
+        fields = '__all__'
