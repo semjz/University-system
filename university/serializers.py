@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import Student
-from authentication.serializers import UserSerializer
+from authentication.serializers import CreateUserSerializer, UpdateUserSerializer
 import string
 import secrets
 
@@ -14,8 +14,8 @@ def create_student_id(entrance_year, entrance_term):
     return f"{entrance_year}{term[entrance_term]}{unique_id}"
 
 
-class StudentSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+class CreateStudentSerializer(serializers.ModelSerializer):
+    user = CreateUserSerializer()
 
     class Meta:
         model = Student
@@ -28,6 +28,14 @@ class StudentSerializer(serializers.ModelSerializer):
         user = CreateUserSerializer().create(user_data)
         student = Student.objects.create(user=user, **validated_data)
         return student
+
+
+class UpdateStudentSerializer(serializers.ModelSerializer):
+    user = UpdateUserSerializer()
+
+    class Meta:
+        model = Student
+        fields = ["user", "major", "school", "entrance_year", "entrance_term"]
 
     def update(self, instance, validated_data):
         user_data = validated_data.pop("user")
@@ -47,3 +55,4 @@ class StudentSerializer(serializers.ModelSerializer):
         user_instance.save()
 
         return instance
+
