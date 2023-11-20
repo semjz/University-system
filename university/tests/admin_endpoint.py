@@ -10,10 +10,7 @@ from ..serializers import CreateStudentSerializer
 
 class ITManagerStudentViewSet(APITestCase):
     def setUp(self) -> None:
-        self.user_it_manager = ItManagerUserFactory.create(last_name="random1")
-        self.user_student = StudentUserFactory.create(last_name="random2")
-        self.user_professor = ProfessorUserFactory.create(last_name="random3")
-        self.user_assistant = AssistantUserFactory.create(last_name="random4")
+        self.user_it_manager = ItManagerUserFactory.create()
         major = MajorFactory.create()
         school = SchoolFactory.create()
         student = StudentFactory.build(school=school, major=major)
@@ -33,13 +30,16 @@ class ITManagerStudentViewSet(APITestCase):
         self._perform_create_student_request(self.user_it_manager, status.HTTP_201_CREATED, 1)
 
     def test_create_student_not_authorized_student(self):
-        self._perform_create_student_request(self.user_student, status.HTTP_403_FORBIDDEN, 0)
+        user_student = StudentUserFactory.create()
+        self._perform_create_student_request(user_student, status.HTTP_403_FORBIDDEN, 0)
 
     def test_create_student_not_authorized_professor(self):
-        self._perform_create_student_request(self.user_professor, status.HTTP_403_FORBIDDEN, 0)
+        user_professor = ProfessorUserFactory.create()
+        self._perform_create_student_request(user_professor, status.HTTP_403_FORBIDDEN, 0)
 
     def test_create_student_not_authorized_assistant(self):
-        self._perform_create_student_request(self.user_assistant, status.HTTP_403_FORBIDDEN, 0)
+        user_assistant = AssistantUserFactory.create()
+        self._perform_create_student_request(user_assistant, status.HTTP_403_FORBIDDEN, 0)
 
     def test_update_student_successful(self):
         self.client.force_authenticate(user=self.user_it_manager)
