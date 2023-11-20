@@ -1,31 +1,23 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
-from model_bakery import baker
-from faker import Faker
-import random
-import string
+from .factories import StudentUserFactory
 from django.urls import reverse_lazy
 
 User = get_user_model()
-fake = Faker(["fa_IR"])
-roles = ["student", "professor", "assistant"]
-genders = ["male", "female"]
-password = fake.password()
-user_id = ''.join(random.choice(string.digits) for _ in range(4))
+
 
 class LoginTest(APITestCase):
     def setUp(self) -> None:
         self.url = reverse_lazy("authentication:login")
-        self.registered_user = baker.prepare(User, user_id=user_id, password=password)
-        self.registered_user.set_password(password)
-        self.registered_user.save()
-        self.payload = {"user_id": self.registered_user.user_id, "password": password}
+        user_data = StudentUserFactory.build()
+        StudentUserFactory.create(user_id=user_data.user_id, password=user_data.password)
+        self.payload = {"user_id": user_data.user_id, "password": user_data.password}
 
     def test_login_successful(self):
         response = self.client.post(self.url, self.payload)
         self.assertTrue(status.is_success(response.status_code))
-        self.assertIn('access', response.data)
+        self.assertIn("access", response.data)
 
     def test_login_unsuccessful_wrong_password(self):
         self.payload["password"] = "wrong password"
@@ -43,15 +35,15 @@ class LoginTest(APITestCase):
 class LogoutTest(APITestCase):
     def setUp(self) -> None:
         self.url = reverse_lazy("authentication:logout")
-        self.registered_user = baker.prepare(User, user_id=user_id, password=password)
-        self.registered_user.set_password(password)
-        self.registered_user.save()
+        user_data = StudentUserFactory.build()
+        StudentUserFactory.create(user_id=user_data.user_id, password=user_data.password)
         response = self.client.post(reverse_lazy("authentication:login")
-                                    , {"user_id": self.registered_user.user_id, "password": password})
+                                    , {"user_id": user_data.user_id
+                                        , "password": user_data.password})
         self.refresh_token = response.data["refresh"]
         self.access_token = response.data["access"]
         self.payload = {"refresh": self.refresh_token}
-        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.access_token}") # authenticate user
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.access_token}")  # authenticate user
 
     def test_logout_successful(self):
         response = self.client.post(self.url, self.payload)
