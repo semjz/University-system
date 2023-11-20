@@ -19,7 +19,7 @@ class User(AbstractUser):
     email = models.EmailField(_("email address"))
 
     profile_image = models.ImageField("user_image")
-    phone_number = models.CharField(_("phone number"), max_length=11, validators=[MinLengthValidator(11)]
+    phone_number = models.CharField(_("phone number"), max_length=13, validators=[MinLengthValidator(11)]
                                     , unique=True)
     national_code = models.CharField(_("national code"), max_length=10, validators=[MinLengthValidator(10)]
                                      , unique=True)
