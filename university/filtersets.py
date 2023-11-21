@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from .models import Student
+from .models import Student, Course
 from .choices import MILITARY_STATUS_CHOICES
 
 
@@ -16,3 +16,12 @@ class StudentFilterSet(filters.FilterSet):
     class Meta:
         model = Student
         fields = ["school", "major", "entrance_year", "military_status"]
+
+
+class CourseFilterSet(filters.FilterSet):
+    name = filters.CharFilter(field_name="name", lookup_expr="icontains", label="Name")
+    schools = filters.CharFilter(field_name="schools__name", lookup_expr="icontains", label="Faculty Name")
+
+    class Meta:
+        model = Course
+        fields = ["name", "schools"]
