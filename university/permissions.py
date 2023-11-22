@@ -14,3 +14,9 @@ class IsAssistant(permissions.BasePermission):
 
     def has_permission(self, request, view):
         return has_role(request.user, Assistant)
+
+
+class IsITManagerOrIsAssistant(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        return has_role(request.user, ITManager) or has_role(request.user, Assistant)
