@@ -2,8 +2,6 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.cache import cache
-import secrets
-import string
 
 User = get_user_model()
 
@@ -57,8 +55,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         return national_code
 
     def validate_phone_number(self, phone_number):
-        if "+" in phone_number:
-            phone_number = phone_number.replace("+", "")
+        phone_number = phone_number.replace("+98", "0")
         if not phone_number.isnumeric():
             raise serializers.ValidationError("Phone number code must only contain digits!")
         return phone_number
