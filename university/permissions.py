@@ -21,8 +21,8 @@ class IsAssistant(permissions.BasePermission):
 class IsITManagerOrIsCourseAssistant(permissions.BasePermission):
 
     def has_permission(self, request, view: viewsets):
-        return has_role(request.user.user, ITManager) or (
-                    has_role(request.user.user, Assistant) and IsCourseAssistant())
+        return has_role(request.user, ITManager) or (
+                    has_role(request.user, Assistant) and IsCourseAssistant())
 
 
 class IsCourseAssistant(permissions.BasePermission):
