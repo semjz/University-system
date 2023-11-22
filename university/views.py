@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from .tasks import test_func
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from .permissions import IsItManager, IsITManagerOrIsAssistantForCourse
+from .permissions import IsItManager, IsITManagerOrIsCourseAssistant
 from .models import Student, Course
 from .serializers import CreateStudentSerializer, UpdateStudentSerializer, CourseSerializer
 from django_filters import rest_framework as filters
@@ -42,4 +42,4 @@ class CourseViewSet(viewsets.ModelViewSet):
         if self.action in ["list", "retrieve"]:
             return (IsAuthenticated(),)
         else:
-            return (IsITManagerOrIsAssistantForCourse(),)
+            return (IsITManagerOrIsCourseAssistant(),)
