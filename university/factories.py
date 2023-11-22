@@ -1,21 +1,22 @@
 import factory
 from factory.django import DjangoModelFactory
 
+import university.models as models
 from .choices import *
-from .models import Student, School, Major, Course
-from authentication.factories import StudentUserFactory
+from authentication.factories import StudentUserFactory, AssistantUserFactory, ItManagerUserFactory, \
+    ProfessorUserFactory
 
 
 class SchoolFactory(DjangoModelFactory):
     class Meta:
-        model = School
+        model = models.School
 
     name = factory.Faker("name")
 
 
 class MajorFactory(DjangoModelFactory):
     class Meta:
-        model = Major
+        model = models.Major
 
     name = factory.Faker("name")
     units = 100
@@ -25,7 +26,7 @@ class MajorFactory(DjangoModelFactory):
 
 class StudentFactory(DjangoModelFactory):
     class Meta:
-        model = Student
+        model = models.Student
 
     user = factory.SubFactory(StudentUserFactory, student=None)
     school = factory.SubFactory(SchoolFactory)
@@ -35,9 +36,34 @@ class StudentFactory(DjangoModelFactory):
     military_status = factory.Iterator([choice[0] for choice in MILITARY_STATUS_CHOICES])
 
 
+class AssistantFactory(DjangoModelFactory):
+    class Meta:
+        model = models.Assistant
+
+    user = factory.SubFactory(AssistantUserFactory, assistant=None)
+    school = factory.SubFactory(SchoolFactory)
+    major = factory.SubFactory(MajorFactory)
+
+
+class ITManagerFactory(DjangoModelFactory):
+    class Meta:
+        model = models.ITManager
+
+    user = factory.SubFactory(ItManagerUserFactory)
+
+
+class ProfessorFactory(DjangoModelFactory):
+    class Meta:
+        model = models.Professor
+
+    user = factory.SubFactory(ProfessorUserFactory)
+    school = factory.SubFactory(SchoolFactory)
+    major = factory.SubFactory(MajorFactory)
+
+
 class CourseFactory(DjangoModelFactory):
     class Meta:
-        model = Course
+        model = models.Course
 
     name = factory.Faker("name")
     credits = factory.Iterator([i for i in range(10)])
@@ -48,5 +74,3 @@ class CourseFactory(DjangoModelFactory):
         if not create or not extracted:
             return
         self.schools.add(*extracted)
-
-
