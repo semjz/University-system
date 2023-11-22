@@ -2,18 +2,17 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
 
-from authentication.factories import (ItManagerUserFactory, AssistantUserFactory, StudentUserFactory
-, ProfessorUserFactory)
-from ..factories import CourseFactory, SchoolFactory
+from authentication.factories import (StudentUserFactory, ProfessorUserFactory)
+import university.factories as factories
 from ..serializers import CourseSerializer
 
 
 class SubjectViewSetTest(APITestCase):
     def setUp(self) -> None:
-        self.it_manager = ItManagerUserFactory.create()
-        self.assistant = AssistantUserFactory.create()
-        school = SchoolFactory.create()
-        course = CourseFactory.build()
+        self.it_manager = factories.ITManagerFactory.create()
+        school = factories.SchoolFactory.create()
+        self.assistant = factories.AssistantFactory.create(school=school)
+        course = factories.CourseFactory.build()
         serializer = CourseSerializer(course)
         self.course_data = serializer.data
         self.course_data["schools"].append(school.id)
@@ -32,7 +31,7 @@ class SubjectViewSetTest(APITestCase):
             },
             "entrance_year": 3000
         }
-        course = CourseFactory.create()
+        course = factories.CourseFactory.create()
         url = reverse("university:subjects-detail", kwargs={"pk": course.id})
         response = self.client.patch(url, payload, format="json")
         self.assertEqual(response.status_code, expected_status)
@@ -44,11 +43,11 @@ class SubjectViewSetTest(APITestCase):
         self._perform_create_course_request(self.assistant, status.HTTP_201_CREATED)
 
     def test_create_course_unauthorized_student(self):
-        student = StudentUserFactory.create()
+        student = factories.StudentFactory.create()
         self._perform_create_course_request(student, status.HTTP_403_FORBIDDEN)
 
     def test_create_course_unauthorized_professor(self):
-        professor = ProfessorUserFactory.create()
+        professor = factories.ProfessorFactory.create()
         self._perform_create_course_request(professor, status.HTTP_403_FORBIDDEN)
 
     def test_update_student_successful_it_manager(self):
