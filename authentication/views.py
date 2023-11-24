@@ -1,4 +1,4 @@
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.request import Request
 from rest_framework.views import APIView
 from rest_framework.generics import UpdateAPIView
@@ -20,7 +20,7 @@ class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = LogoutSerializer
 
-    def post(self, request:Request):
+    def post(self, request: Request):
         try:
             refresh_token = request.data["refresh"]
             refresh_token = RefreshToken(refresh_token)
@@ -33,7 +33,7 @@ class LogoutView(APIView):
 
 
 class PasswordResetRequest(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
 
     def post(self, request: Request):
         reset_token = PasswordResetTokenGenerator().make_token(request.user)
@@ -46,7 +46,7 @@ class PasswordResetRequest(APIView):
 
 class PasswordResetAction(UpdateAPIView):
     queryset = User.objects.all()
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     serializer_class = ChangePasswordSerializer
 
 

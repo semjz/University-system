@@ -89,7 +89,7 @@ class Major(models.Model):
 
 
 class Assistant(models.Model):
-    user = models.OneToOneField(to=User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE, primary_key=True, related_name="assistant")
     school = models.OneToOneField(to='School', on_delete=models.CASCADE)
     major = models.OneToOneField(to='Major', on_delete=models.CASCADE)
 
