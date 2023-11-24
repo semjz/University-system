@@ -1,0 +1,1 @@
+from .admin_endpoint import ITManagerStudentViewSet

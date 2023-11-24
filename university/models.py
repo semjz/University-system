@@ -9,8 +9,9 @@ User = get_user_model()
 
 
 class Student(models.Model):
-    user = models.OneToOneField(to=User, on_delete=models.CASCADE, primary_key=True)
-    supervisor = models.ForeignKey(to='Professor', on_delete=models.CASCADE, null=True, blank=True)
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE, primary_key=True, related_name="student")
+    supervisor = models.ForeignKey(to='Professor', on_delete=models.CASCADE, null=True, blank=True
+                                   , related_name="student")
     major = models.ForeignKey(to='Major', on_delete=models.CASCADE, related_name="students")
     school = models.ForeignKey(to='School', on_delete=models.CASCADE, related_name="students")
     entrance_year = models.IntegerField()
@@ -127,7 +128,7 @@ class ITManager(models.Model):
 
 
 class School(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name

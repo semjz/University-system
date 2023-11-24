@@ -25,3 +25,6 @@ class CustomUserManger(UserManager):
         extra_fields.setdefault("is_active", True)
         extra_fields.setdefault("role", "Super Admin")
         self.create_user(user_id, email, password, **extra_fields)
+
+    def create(self, **kwargs):
+        return self.create_user(**kwargs)
