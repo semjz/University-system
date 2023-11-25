@@ -1,17 +1,23 @@
 from django_filters import rest_framework as filters
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 
 from . import filtersets
-from .models import Student
+from .filtersets.Professor import ProfessorFilter
+from .models import Student, Term, Professor
 from .permissions import IsItManager
 from .serializers import UpdateStudentSerializer, CreateStudentSerializer, CourseSerializer
+from .serializers.professor import ProfessorSerializer
+from .serializers.term import TermSerializer
 
 
 class ITManagerStudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     permission_classes = (IsAuthenticated, IsItManager)
     http_method_names = ("get", "post", "put", "patch", "delete")
+    pagination_class = PageNumberPagination
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = filtersets.StudentFilterSet
 
@@ -23,3 +29,21 @@ class ITManagerStudentViewSet(viewsets.ModelViewSet):
             return UpdateStudentSerializer
         else:
             return CreateStudentSerializer
+
+
+class ITManagerTermViewSet(viewsets.ModelViewSet):
+    queryset = Term.objects.all()
+    serializer_class = TermSerializer
+    permission_classes = [IsAuthenticated, IsItManager]
+
+    http_method_names = ['get', 'post', 'put', 'patch', 'delete']
+
+
+class ITManagerProfessorViewSet(viewsets.ModelViewSet):
+    queryset = Professor.objects.all()
+    serializer_class = ProfessorSerializer
+    permission_classes = [IsAuthenticated, IsItManager]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ProfessorFilter
+
+    http_method_names = ['get', 'post', 'put', 'patch', 'delete']

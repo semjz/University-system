@@ -35,7 +35,7 @@ class Student(models.Model):
 
     @property
     def sanavat(self):
-        terms_count = self.terms.filter(student=self).aggregate(term_count=Count('id'))['term_count']
+        terms_count = self.terms.filter(student=self).aggregate(term_count=Count('name'))['term_count']
         return terms_count
 
 
