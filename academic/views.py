@@ -1,11 +1,13 @@
 from django_filters import rest_framework as filters
 from rest_framework import viewsets
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 
 from academic import filtersets
 from academic.models import Course
-from academic.permissions import IsITManagerOrIsCourseAssistant
+from academic.permissions import IsITManagerOrIsCourseAssistant, HasTime
 from academic.serializers import CourseSerializer
+from academic.serializers.course import TermCourseSerializer
 
 
 # Create your views here.
@@ -22,3 +24,15 @@ class CourseViewSet(viewsets.ModelViewSet):
             return (IsAuthenticated(),)
         else:
             return (IsITManagerOrIsCourseAssistant(),)
+
+
+class TermCourseViewSet(viewsets.ModelViewSet):
+    queryset = Course.objects.all()
+    serializer_class = TermCourseSerializer
+    permission_classes = [IsITManagerOrIsCourseAssistant, HasTime]
+    pagination_class = PageNumberPagination
+
+    http_method_names = ['get', 'post', 'put', 'patch', 'delete']
+
+
+
