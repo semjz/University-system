@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 import os
+from datetime import datetime
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -193,3 +194,22 @@ SPECTACULAR_SETTINGS = {
 }
 
 ROLEPERMISSIONS_MODULE = "authentication.roles"
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': 'logs/universitys.log',
+            'maxBytes': 1000,
+            'backupCount': 10,
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'propagate': True,
+        },
+    },
+}
