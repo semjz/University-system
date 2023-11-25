@@ -6,7 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import get_user_model
-from .serializers import CreateUserSerializer, ChangePasswordSerializer
+from .serializers import RegisterSerializer, ChangePasswordSerializer
 from django.conf import settings
 from django.core.cache import cache
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
@@ -24,28 +24,26 @@ CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
-    serializer_class = LogoutSerializer
 
-    def post(self, request: Request):
+    def post(self, request:Request):
         try:
-            refresh_token = request.data["refresh"]
+            refresh_token = request.data["refresh_token"]
             refresh_token = RefreshToken(refresh_token)
             refresh_token.blacklist()
             return Response(status=status.HTTP_205_RESET_CONTENT)
 
         except Exception as e:
-            error_message = {'error': str(e)}
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class RegisterView(CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
-    serializer_class = CreateUserSerializer
+    serializer_class = RegisterSerializer
 
 
 class PasswordResetRequest(APIView):
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request: Request):
         reset_token = PasswordResetTokenGenerator().make_token(request.user)
@@ -58,7 +56,7 @@ class PasswordResetRequest(APIView):
 
 class PasswordResetAction(UpdateAPIView):
     queryset = User.objects.all()
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = ChangePasswordSerializer
 
 

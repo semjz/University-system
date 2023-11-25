@@ -2,7 +2,6 @@ from django.db import models
 from django.db.models import Avg, Count
 from django_jalali.db import models as jmodels
 
-
 MILITARY_STATUS_CHOICES = [
     ("permanent_exemption", "permanent_exemption"),
     ("education_exemption", "education_exemption"),
@@ -39,7 +38,6 @@ class Student(models.Model):
     entrance_term = models.CharField(choices=ENTRANCE_TERM_CHOICES, null=False, blank=False)
     military_status = models.CharField(choices=MILITARY_STATUS_CHOICES, null=False, blank=False)
     courses = models.ManyToManyField(to='Course', through='Enrollment', null=True, blank=True)
-    deleted_terms = models.ManyToManyField(to='Term', through='DeleteTerm', null=True, blank=True)
 
     @property
     def average_grade(self):
@@ -76,8 +74,7 @@ class Term(models.Model):
     term_end_time = jmodels.jDateTimeField(blank=True, null=True)
 
 
-class Assistant(models.Model):
-    user = models.OneToOneField(to='User', on_delete=models.CASCADE, null=False, blank=False, primary_key=True)
+class EducationalDeputy(models.Model):
     school = models.OneToOneField(to='School', on_delete=models.CASCADE, null=False, blank=False)
     major = models.OneToOneField(to='Major', on_delete=models.CASCADE, null=False, blank=False)
 
@@ -90,13 +87,15 @@ class Enrollment(models.Model):
     student_grade = models.IntegerField(null=True, blank=True)
 
 
+
+
+
 class DeleteTerm(models.Model):
     term = models.ForeignKey(Term, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     result = models.CharField(choices=DELETE_TERM_STATUS, null=False, blank=False)
     student_comment = models.TextField()
     educational_deputy_comment = models.TextField()
-
 
 class StudyEnrollmentRequest(models.Model):
     student = models.ForeignKey('Student', on_delete=models.CASCADE)

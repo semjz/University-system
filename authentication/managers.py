@@ -1,30 +1,35 @@
 from django.contrib.auth.models import UserManager
+from django.utils.translation import gettext_lazy as g
 from django.contrib.auth.hashers import make_password
-from rolepermissions.roles import assign_role
+
+import secrets
+import string
 
 
 class CustomUserManger(UserManager):
     def create_user(self, user_id, email=None, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
-        is_staff = extra_fields.get("is_staff")
         email = self.normalize_email(email)
         role = extra_fields.get("role")
-        if not role:
+        is_staff = extra_fields.get("is_staff")
+        if not role and not is_staff:
             raise ValueError("The user role must be set")
         user = self.model(user_id=user_id, email=email, **extra_fields)
         user.password = make_password(password)
         user.save(using=self._db)
-        if not is_staff:
-            assign_role(user, role)
         return user
 
     def create_superuser(self, user_id, email=None, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
-        extra_fields.setdefault("role", "Super Admin")
-        self.create_user(user_id, email, password, **extra_fields)
+        extra_fields.setdefault("role", "It-manager")
+        user_id = ''.join(secrets.choice(string.digits) for _ in range(4))
 
-    def create(self, **kwargs):
-        return self.create_user(**kwargs)
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError(g("Superuser must have is_staff=True."))
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError(g("Superuser must have is_superuser=True."))
+        self.create_user(user_id, email, password, **extra_fields)
+        print(f"user id: {user_id}")
