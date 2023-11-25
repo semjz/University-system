@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinLengthValidator
 from .managers import CustomUserManger
 from django.utils.translation import gettext_lazy as _
-from .choices import *
+from utils.choices import *
 
 
 class User(AbstractUser):

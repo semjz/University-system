@@ -1,11 +1,12 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from ..factories import StudentFactory, MajorFactory, SchoolFactory
+
+from management.factories import StudentFactory, MajorFactory, SchoolFactory
 from authentication.factories import (ItManagerUserFactory, StudentUserFactory, AssistantUserFactory
 , ProfessorUserFactory)
-from ..models import Student
-from ..serializers import CreateStudentSerializer
+from management.models import Student
+from management.serializers import CreateStudentSerializer
 
 
 class ITManagerStudentViewSet(APITestCase):
@@ -20,7 +21,7 @@ class ITManagerStudentViewSet(APITestCase):
 
     def _perform_create_student_request(self, user, expected_status, num_of_students):
         self.client.force_authenticate(user=user)
-        url = reverse("university:admin-student-list")
+        url = reverse("management:admin-student-list")
         response = self.client.post(url, self.student_data, format="json")
         students = Student.objects.all()
         self.assertEqual(response.status_code, expected_status)
@@ -50,8 +51,6 @@ class ITManagerStudentViewSet(APITestCase):
             "entrance_year": 3000
         }
         student = StudentFactory.create()
-        url = reverse("university:admin-student-detail", kwargs={"pk": student.user_id})
+        url = reverse("management:admin-student-detail", kwargs={"pk": student.user_id})
         response = self.client.patch(url, payload, format="json")
         self.assertTrue(status.is_success(response.status_code))
-
-

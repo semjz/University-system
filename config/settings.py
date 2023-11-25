@@ -56,8 +56,11 @@ INSTALLED_APPS = [
     'django_filters',
 
     # internal_apps
-    'university',
     'authentication',
+    'management',
+    'academic',
+    'unitselection',
+    'assessment'
 ]
 
 MIDDLEWARE = [
