@@ -23,6 +23,7 @@ class CreateTeachingAssistantSerializer(serializers.ModelSerializer):
         model = Assistant
         fields = ["user", "seniority", "faculty", "deputy_field"]
 
+
     def create(self, validated_data):
         user_data = validated_data.pop("user")
         user = CreateUserSerializer().create(user_data)
