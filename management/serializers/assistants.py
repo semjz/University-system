@@ -6,19 +6,15 @@ from authentication.serializers import CreateUserSerializer, UpdateUserSerialize
 
 User = get_user_model()
 
-
 class AssistantListSerializer(serializers.ModelSerializer):
-    # Customize this serializer to include the desired fields in the list view
     class Meta:
         model = Assistant
         fields = ["id", "user", "seniority", "faculty", "deputy_field"]
-
 
 class AssistantDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assistant
         fields = ["id", "user", "seniority", "faculty", "deputy_field"]
-
 
 class CreateTeachingAssistantSerializer(serializers.ModelSerializer):
     user = CreateUserSerializer()
