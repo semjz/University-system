@@ -17,10 +17,10 @@ class Course(models.Model):
 
 
 class TermCourse(models.Model):
-    class_date_time = models.DateTimeField()
-    exam_date_time = models.DateTimeField()
+    class_date_time = models.DateTimeField(unique=True)
+    exam_date_time = models.DateTimeField(blank=True, null=True)
     exam_site = models.CharField()
     capacity = models.PositiveIntegerField(validators=(MaxValueValidator(250),))
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=True, null=True)
-    term = models.ForeignKey(Term, on_delete=models.CASCADE)
-    professors = models.ManyToManyField("management.Professor")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, unique=True)
+    term = models.ForeignKey(Term, on_delete=models.CASCADE, unique=True)
+    professors = models.ForeignKey("management.Professor", on_delete=models.CASCADE, unique=True)

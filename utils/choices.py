@@ -12,8 +12,8 @@ MILITARY_STATUS_CHOICES = [
     ("included", "Included"),
 ]
 ENTRANCE_TERM_CHOICES = [
-    ("Mehr", "Mehr"),
-    ("Bahman", "Bahman"),
+    ("mehr", "Mehr"),
+    ("bahman", "Bahman"),
 ]
 STAGE_CHOICES = [
     ("associate", "Associate"),
@@ -41,5 +41,5 @@ REQUEST_RESULT_CHOICES = [
 
 GENDERS_CHOICES = [("male", "male"), ("female", "female")]
 
-ROLES_CHOICES = [("Student", "Student"), ("Professor", "Professor"), ("Assistant", "Assistant")
-    , ("IT Manager", "It Manager"), ("Super Admin", "Super Admin")]
+ROLES_CHOICES = [("Student", "Student"), ("Professor", "Professor"), ("Assistant", "Assistant"),
+                 ("IT Manager", "It Manager"), ("Super Admin", "Super Admin")]
