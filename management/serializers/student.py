@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Student, Course
+from management.models import Student
 from authentication.serializers import CreateUserSerializer, UpdateUserSerializer
 import string
 import secrets
@@ -55,11 +55,3 @@ class UpdateStudentSerializer(serializers.ModelSerializer):
         user_instance.save()
 
         return instance
-
-
-class CourseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Course
-        exclude = ("id",)
-
-

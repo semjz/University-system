@@ -52,8 +52,11 @@ INSTALLED_APPS = [
     'django_celery_beat',
 
     # internal_apps
-    'university',
     'authentication',
+    'management',
+    'academic',
+    'unitselection',
+    'assessment'
 ]
 
 MIDDLEWARE = [

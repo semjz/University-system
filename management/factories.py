@@ -1,15 +1,15 @@
 import factory
 from factory.django import DjangoModelFactory
 
-import university.models as models
-from .choices import *
+from . import models
+from utils.choices import *
 from authentication.factories import StudentUserFactory, AssistantUserFactory, ItManagerUserFactory, \
     ProfessorUserFactory
 
 
 class SchoolFactory(DjangoModelFactory):
     class Meta:
-        model = models.School
+        model = models.Faculty
 
     name = factory.Faker("name")
 
@@ -60,17 +60,3 @@ class ProfessorFactory(DjangoModelFactory):
     school = factory.SubFactory(SchoolFactory)
     major = factory.SubFactory(MajorFactory)
 
-
-class CourseFactory(DjangoModelFactory):
-    class Meta:
-        model = models.Course
-
-    name = factory.Faker("name")
-    credits = factory.Iterator([i for i in range(10)])
-    type = factory.Iterator([choice[0] for choice in COURSE_TYPES])
-
-    @factory.post_generation
-    def schools(self, create, extracted, **kwargs):
-        if not create or not extracted:
-            return
-        self.schools.add(*extracted)
