@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from . import filtersets
 from .models import Student
 from .permissions import IsItManager
-from .serializers import UpdateStudentSerializer, CreateStudentSerializer, CourseSerializer
+from .serializers import RUDStudentSerializer, CreateStudentSerializer
 
 
 class ITManagerStudentViewSet(viewsets.ModelViewSet):
@@ -20,6 +20,6 @@ class ITManagerStudentViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.action == "partial_update" or self.action == "update":
-            return UpdateStudentSerializer
+            return RUDStudentSerializer
         else:
             return CreateStudentSerializer

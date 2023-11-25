@@ -30,7 +30,7 @@ class CreateStudentSerializer(serializers.ModelSerializer):
         return student
 
 
-class UpdateStudentSerializer(serializers.ModelSerializer):
+class RUDStudentSerializer(serializers.ModelSerializer):
     user = UpdateUserSerializer()
 
     class Meta:

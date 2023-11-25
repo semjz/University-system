@@ -8,8 +8,6 @@ from academic.permissions import IsITManagerOrIsCourseAssistant
 from academic.serializers import CourseSerializer
 
 
-# Create your views here.
-
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     http_method_names = ("get", "post", "put", "patch", "delete")

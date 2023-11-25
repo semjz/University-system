@@ -1,8 +1,8 @@
 from rest_framework import permissions, viewsets
 from rolepermissions.checkers import has_role
 
-from authentication.roles import ITManager, Assistant
 from management.models import Faculty
+from authentication.roles import Student, ITManager, Assistant
 from academic.models import Course
 
 
@@ -38,3 +38,15 @@ class IsITManagerOrIsCourseAssistant(permissions.BasePermission):
     def has_permission(self, request, view: viewsets):
         return has_role(request.user, ITManager) or (
                 has_role(request.user, Assistant) and IsCourseAssistant())
+
+
+class IsAssistant(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        return has_role(request.user, Assistant)
+
+
+class IsStudent(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        return has_role(request.user, Student)
