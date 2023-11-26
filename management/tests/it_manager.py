@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from management.factories import StudentFactory, MajorFactory, SchoolFactory
+from management.factories import StudentFactory, MajorFactory, FacultyFactory
 from authentication.factories import (ItManagerUserFactory, StudentUserFactory, AssistantUserFactory
 , ProfessorUserFactory)
 from management.models import Student
@@ -13,7 +13,7 @@ class ITManagerStudentViewSet(APITestCase):
     def setUp(self) -> None:
         self.user_it_manager = ItManagerUserFactory.create()
         major = MajorFactory.create()
-        school = SchoolFactory.create()
+        school = FacultyFactory.create()
         student = StudentFactory.build(school=school, major=major)
         serializer = CreateStudentSerializer(student)
         self.student_data = serializer.data

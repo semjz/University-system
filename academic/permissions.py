@@ -1,9 +1,9 @@
 import datetime
 
-from rest_framework import permissions, viewsets
+from rest_framework import permissions
 from rolepermissions.checkers import has_role
 
-from authentication.roles import ITManager, Assistant
+from authentication.roles import AssistantRole, StudentRole
 from management.models import Faculty, Term
 from academic.models import Course
 
@@ -35,13 +35,6 @@ class IsCourseAssistant(permissions.BasePermission):
         return True
 
 
-class IsITManagerOrIsCourseAssistant(permissions.BasePermission):
-
-    def has_permission(self, request, view: viewsets):
-        return has_role(request.user, ITManager) or (
-                has_role(request.user, Assistant) and IsCourseAssistant())
-
-
 class HasTime(permissions.BasePermission):
 
     def has_permission(self, request, view):
@@ -52,3 +45,18 @@ class HasTime(permissions.BasePermission):
         print(end_term_time)
         print(fix_course_end_time)
         return not end_term_time > now_time > fix_course_end_time
+
+
+class IsAssistant(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        return has_role(request.user, AssistantRole)
+
+
+class IsSameStudent(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        return has_role(request.user, StudentRole)
+
+    def has_object_permission(self, request, view, obj):
+        return request.user.id == obj.user_id

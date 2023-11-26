@@ -18,3 +18,4 @@ django_celery_beat
 drf_spectacular
 django-role-permissions
 factory_boy
+django-guardian

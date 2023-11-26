@@ -7,7 +7,7 @@ from authentication.factories import StudentUserFactory, AssistantUserFactory, I
     ProfessorUserFactory
 
 
-class SchoolFactory(DjangoModelFactory):
+class FacultyFactory(DjangoModelFactory):
     class Meta:
         model = models.Faculty
 
@@ -21,7 +21,7 @@ class MajorFactory(DjangoModelFactory):
     name = factory.Faker("name")
     units = 100
     stage = factory.Iterator([choice[0] for choice in STAGE_CHOICES])
-    school = factory.SubFactory(SchoolFactory)
+    school = factory.SubFactory(FacultyFactory)
 
 
 class StudentFactory(DjangoModelFactory):
@@ -29,7 +29,7 @@ class StudentFactory(DjangoModelFactory):
         model = models.Student
 
     user = factory.SubFactory(StudentUserFactory, student=None)
-    school = factory.SubFactory(SchoolFactory)
+    school = factory.SubFactory(FacultyFactory)
     major = factory.SubFactory(MajorFactory, school=factory.SelfAttribute('..school'))
     entrance_year = factory.Faker("year")
     entrance_term = factory.Iterator([choice[0] for choice in ENTRANCE_TERM_CHOICES])
@@ -41,7 +41,7 @@ class AssistantFactory(DjangoModelFactory):
         model = models.Assistant
 
     user = factory.SubFactory(AssistantUserFactory, assistant=None)
-    school = factory.SubFactory(SchoolFactory)
+    school = factory.SubFactory(FacultyFactory)
     major = factory.SubFactory(MajorFactory)
 
 
@@ -57,6 +57,6 @@ class ProfessorFactory(DjangoModelFactory):
         model = models.Professor
 
     user = factory.SubFactory(ProfessorUserFactory)
-    school = factory.SubFactory(SchoolFactory)
+    school = factory.SubFactory(FacultyFactory)
     major = factory.SubFactory(MajorFactory)
 

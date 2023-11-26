@@ -4,14 +4,14 @@ from rest_framework.test import APITestCase
 
 from academic.factories import CourseFactory
 from management.serializers import CourseSerializer
-from management.factories import SchoolFactory, AssistantFactory
+from management.factories import FacultyFactory, AssistantFactory
 from authentication.factories import (ItManagerUserFactory, StudentUserFactory, ProfessorUserFactory)
 
 
 class SubjectViewSetTest(APITestCase):
     def setUp(self) -> None:
         self.it_manager_user = ItManagerUserFactory.create()
-        self.school = SchoolFactory.create()
+        self.school = FacultyFactory.create()
         self.assistant = AssistantFactory.create(school=self.school)
         course = CourseFactory.build()
         serializer = CourseSerializer(course)

@@ -1,2 +1,2 @@
-from .student import CreateStudentSerializer, UpdateStudentSerializer
+from .student import CreateStudentSerializer, RUDStudentSerializer
 from .course import CourseSerializer

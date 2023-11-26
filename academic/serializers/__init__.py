@@ -1,1 +1,2 @@
 from .course import CourseSerializer
+from .student import StudentUpdateStudentSerializer, AssistantUpdateStudentSerializer

@@ -5,10 +5,10 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 
 from . import filtersets
-from .filtersets.Professor import ProfessorFilter
+from .filtersets.professor import ProfessorFilter
 from .models import Student, Term, Professor
 from .permissions import IsItManager
-from .serializers import UpdateStudentSerializer, CreateStudentSerializer, CourseSerializer
+from .serializers import RUDStudentSerializer, CreateStudentSerializer, CourseSerializer
 from .serializers.professor import ProfessorSerializer
 from .serializers.term import TermSerializer
 
@@ -26,7 +26,7 @@ class ITManagerStudentViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.action == "partial_update" or self.action == "update":
-            return UpdateStudentSerializer
+            return RUDStudentSerializer
         else:
             return CreateStudentSerializer
 

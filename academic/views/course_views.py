@@ -5,12 +5,12 @@ from rest_framework.permissions import IsAuthenticated
 
 from academic import filtersets
 from academic.models import Course
-from academic.permissions import IsITManagerOrIsCourseAssistant, HasTime
+from academic.permissions import IsCourseAssistant, HasTime
 from academic.serializers import CourseSerializer
 from academic.serializers.course import TermCourseSerializer
 
+from management.permissions import IsItManager
 
-# Create your views here.
 
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
@@ -23,13 +23,13 @@ class CourseViewSet(viewsets.ModelViewSet):
         if self.action in ["list", "retrieve"]:
             return (IsAuthenticated(),)
         else:
-            return (IsITManagerOrIsCourseAssistant(),)
+            return ((IsItManager | IsCourseAssistant)(),)
 
 
 class TermCourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = TermCourseSerializer
-    permission_classes = [IsITManagerOrIsCourseAssistant, HasTime]
+    permission_classes = [(IsItManager | IsCourseAssistant)(), HasTime]
     pagination_class = PageNumberPagination
 
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']

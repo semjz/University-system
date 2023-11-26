@@ -1,16 +1,17 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from management.models import Student
-from authentication.serializers import CreateUserSerializer, UpdateUserSerializer
+from authentication.serializers import CreateUserSerializer, FullUpdateUserSerializer
 import string
 import secrets
+from utils.choices import ENTRANCE_TERM_CHOICES
 
 User = get_user_model()
 
 
 def create_student_id(entrance_year, entrance_term):
     unique_id = ''.join(secrets.choice(string.digits) for _ in range(4))
-    term = {"Mehr": 1, "Bahman": 2}
+    term = {ENTRANCE_TERM_CHOICES[0][0]: 1, ENTRANCE_TERM_CHOICES[1][0]: 2}
     return f"{entrance_year}{term[entrance_term]}{unique_id}"
 
 
@@ -30,8 +31,8 @@ class CreateStudentSerializer(serializers.ModelSerializer):
         return student
 
 
-class UpdateStudentSerializer(serializers.ModelSerializer):
-    user = UpdateUserSerializer()
+class RUDStudentSerializer(serializers.ModelSerializer):
+    user = FullUpdateUserSerializer()
 
     class Meta:
         model = Student
