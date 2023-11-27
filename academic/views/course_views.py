@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from academic import filtersets
 from academic.models import Course
-from academic.permissions import IsCourseAssistant, HasTime
+from academic.permissions import IsCourseAssistant
 from academic.serializers import CourseSerializer
 from academic.serializers.course import TermCourseSerializer
 
@@ -29,7 +29,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 class TermCourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = TermCourseSerializer
-    permission_classes = [(IsItManager | IsCourseAssistant)(), HasTime]
+    permission_classes = [IsItManager | IsCourseAssistant]
     pagination_class = PageNumberPagination
 
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
