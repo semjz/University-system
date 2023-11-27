@@ -23,7 +23,6 @@ class StudentListRetrieveSet(GenericViewSet
     queryset = Student.objects.all()
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = StudentFilterSet
-    permission_classes = (IsAuthenticated, IsAssistant | IsSameStudent)
 
     def get_serializer_class(self):
         if self.action in ["update", "partial_update"]:
@@ -45,8 +44,8 @@ class StudentListRetrieveSet(GenericViewSet
 
     def perform_update(self, serializer):
 
-        if self.request.data["user"]["user_id"]:
-            if self.request.user.has_perm('management.can_modify_user_id'):
+        if self.request.data["user"].get("user_id"):
+            if self.request.user.has_perm('authentication.can_modify_user_id'):
                 serializer.save()
             else:
                 raise PermissionDenied("You do not have permission to modify user_id.")
