@@ -25,7 +25,7 @@ class ITManagerStudentViewSet(viewsets.ModelViewSet):
         instance.user.delete()
 
     def get_serializer_class(self):
-        if self.action == "partial_update" or self.action == "update":
+        if self.action in ["update", "partial_update"]:
             return RUDStudentSerializer
         else:
             return CreateStudentSerializer
