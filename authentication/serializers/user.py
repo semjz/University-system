@@ -32,8 +32,7 @@ class FullUpdateUserSerializer(serializers.ModelSerializer):
 class StudentUpdateUserSerializer(FullUpdateUserSerializer):
     class Meta:
         model = User
-        fields = ["user_id", "first_name", "last_name", "national_code", "phone_number", "email", "gender", "birth_date"]
-        read_only_fields = ("user_id",)
+        fields = ["first_name", "last_name", "national_code", "phone_number", "email", "gender", "birth_date"]
 
 
 class CreateUserSerializer(FullUpdateUserSerializer):
