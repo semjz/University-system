@@ -58,3 +58,8 @@ class SubjectViewSetTest(APITestCase):
 
     def test_update_student_successful_assistant(self):
         self._perform_update_course_request(self.assistant.user, status.HTTP_200_OK)
+
+    def test_update_student_unsuccessful_wrong_assistant(self):
+        school = FacultyFactory.create()
+        assistant = AssistantFactory.create(school=school)
+        self._perform_update_course_request(assistant.user, status.HTTP_403_FORBIDDEN)
