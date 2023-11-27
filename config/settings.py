@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'rolepermissions',
     'django_filters',
+    'guardian',
 
     # internal_apps
     'authentication',
@@ -204,3 +205,10 @@ ROLEPERMISSIONS_MODULE = "authentication.roles"
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
 }
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend', # this is default
+    'guardian.backends.ObjectPermissionBackend',
+)
+
+ANONYMOUS_USER_NAME = "0000"

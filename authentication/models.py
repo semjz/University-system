@@ -1,6 +1,11 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinLengthValidator
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from guardian.shortcuts import assign_perm
+
 from .managers import CustomUserManger
 from django.utils.translation import gettext_lazy as _
 from utils.choices import *
@@ -32,3 +37,6 @@ class User(AbstractUser):
 
     def __str__(self):
         return str(self.username)
+
+
+

@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Avg, Count
-
 from utils.choices import *
 
 
@@ -9,14 +8,14 @@ User = get_user_model()
 
 
 class ITManager(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user_id
 
 
 class Student(models.Model):
-    user = models.OneToOneField(to=User, on_delete=models.CASCADE, primary_key=True, related_name="student")
+    user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
     supervisor = models.ForeignKey(to="Professor", on_delete=models.CASCADE, null=True, blank=True
                                    , related_name="student")
     major = models.ForeignKey(to="management.Major", on_delete=models.CASCADE, related_name="students")
@@ -26,6 +25,7 @@ class Student(models.Model):
     military_status = models.CharField(choices=MILITARY_STATUS_CHOICES, max_length=20)
     courses = models.ManyToManyField(to="academic.Course", through="unitselection.Enrollment", blank=True)
     deleted_terms = models.ManyToManyField(to='Term', through='DeleteTerm', blank=True)
+
 
     @property
     def average_grade(self):
@@ -40,7 +40,7 @@ class Student(models.Model):
 
 
 class Professor(models.Model):
-    user = models.OneToOneField(to=User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
     school = models.ForeignKey(to="management.Faculty", on_delete=models.CASCADE, related_name="professors")
     past_courses = models.ManyToManyField(to="academic.Course", blank=True)
     major = models.ForeignKey(to="management.Major", on_delete=models.CASCADE, related_name="professors")
@@ -49,6 +49,9 @@ class Professor(models.Model):
 
 
 class Assistant(models.Model):
-    user = models.OneToOneField(to=User, on_delete=models.CASCADE, primary_key=True, related_name="assistant")
+    user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
     school = models.OneToOneField(to="management.Faculty", on_delete=models.CASCADE)
     major = models.OneToOneField(to="management.Major", on_delete=models.CASCADE)
+
+
+

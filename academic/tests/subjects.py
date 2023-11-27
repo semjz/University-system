@@ -4,14 +4,14 @@ from rest_framework.test import APITestCase
 
 from academic.factories import CourseFactory
 from management.serializers import CourseSerializer
-from management.factories import SchoolFactory, AssistantFactory
+from management.factories import FacultyFactory, AssistantFactory
 from authentication.factories import (ItManagerUserFactory, StudentUserFactory, ProfessorUserFactory)
 
 
 class SubjectViewSetTest(APITestCase):
     def setUp(self) -> None:
         self.it_manager_user = ItManagerUserFactory.create()
-        self.school = SchoolFactory.create()
+        self.school = FacultyFactory.create()
         self.assistant = AssistantFactory.create(school=self.school)
         course = CourseFactory.build()
         serializer = CourseSerializer(course)
@@ -58,3 +58,8 @@ class SubjectViewSetTest(APITestCase):
 
     def test_update_student_successful_assistant(self):
         self._perform_update_course_request(self.assistant.user, status.HTTP_200_OK)
+
+    def test_update_student_unsuccessful_wrong_assistant(self):
+        school = FacultyFactory.create()
+        assistant = AssistantFactory.create(school=school)
+        self._perform_update_course_request(assistant.user, status.HTTP_403_FORBIDDEN)

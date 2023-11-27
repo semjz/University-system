@@ -1,6 +1,7 @@
 import secrets
 import string
 import factory
+from factory import fuzzy
 from factory.django import DjangoModelFactory
 from django.contrib.auth import get_user_model
 
@@ -17,8 +18,8 @@ class BaseUserFactory(DjangoModelFactory):
         exclude = ("phone_number1",)
         abstract = True
 
-    first_name = factory.Faker('first_name')
-    last_name = factory.Faker('last_name')
+    first_name = fuzzy.FuzzyText(length=10)
+    last_name = fuzzy.FuzzyText(length=12)
     email = factory.Faker('email')
     phone_number1 = factory.Faker("phone_number", locale="fa_IR")
     phone_number = factory.LazyAttribute(lambda o: o.phone_number1.replace(" ", "")[:13])
