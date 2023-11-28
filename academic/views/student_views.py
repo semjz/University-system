@@ -1,12 +1,17 @@
+from django.http import Http404
 from django_filters import rest_framework as filters
-from rest_framework import mixins, status
+from rest_framework import mixins
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.generics import RetrieveAPIView
+from rest_framework.views import APIView
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
+from academic.models import Course
 from academic.permissions import IsAssistant, IsSameStudent
+from academic.serializers.student import StudentAllowedCoursesSerializer
 from management.models import Student
 from management.filtersets import StudentFilterSet
 from academic.serializers import StudentUpdateStudentSerializer, AssistantUpdateStudentSerializer
@@ -51,4 +56,20 @@ class StudentListRetrieveSet(GenericViewSet
                 raise PermissionDenied("You do not have permission to modify user_id.")
         else:
             serializer.save()
+
+    class StudentAllowedCourses(APIView):
+        permission_classes = (IsAuthenticated, IsSameStudent)
+
+        def get_object(self, pk):
+            try:
+                return Student.objects.get(pk=pk)
+            except Student.DoesNotExist:
+                raise Http404
+
+        def get(self, request, pk, format=None):
+            student = self.get_object(pk)
+            serializer = StudentAllowedCoursesSerializer(student.courses)
+            return Response(serializer.data)
+
+
 

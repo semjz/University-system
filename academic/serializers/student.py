@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 
-from management.models import Student
+from rest_framework import serializers
+
+from academic.models import Course
 from authentication.serializers import FullUpdateUserSerializer, StudentUpdateUserSerializer
 from management.serializers import RUDStudentSerializer
 
@@ -14,4 +16,10 @@ class AssistantUpdateStudentSerializer(RUDStudentSerializer):
 
 class StudentUpdateStudentSerializer(AssistantUpdateStudentSerializer):
     user = StudentUpdateUserSerializer()
+
+
+class StudentAllowedCoursesSerializer(serializers.Serializer):
+    class Meta:
+        model = Course
+        fields = ("name", "credits", "type")
 
