@@ -23,6 +23,12 @@ class MajorFactory(DjangoModelFactory):
     stage = factory.Iterator([choice[0] for choice in STAGE_CHOICES])
     school = factory.SubFactory(FacultyFactory)
 
+    @factory.post_generation
+    def courses(self, create, extracted, **kwargs):
+        if not create or not extracted:
+            return
+        self.courses.add(*extracted)
+
 
 class StudentFactory(DjangoModelFactory):
     class Meta:
