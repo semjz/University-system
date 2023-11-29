@@ -1,7 +1,8 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from .views import CourseViewSet, TermCourseViewSet, StudentListRetrieveSet
+from .views import (CourseViewSet, TermCourseViewSet, StudentListRetrieveSet, StudentAllowedCoursesView
+, StudentRemainingTermsView, StudentCoursesReportView)
 
 app_name = "academic"
 router = DefaultRouter()
@@ -11,4 +12,7 @@ router.register('students', StudentListRetrieveSet, basename="students")
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('student/<int:pk>/my-courses/', StudentAllowedCoursesView.as_view(), name="student-allowed-courses"),
+    path('student/<int:pk>/remaining-terms/', StudentRemainingTermsView.as_view(), name="student-remaining-terms"),
+    path('student/<int:pk>/pass-courses-report/', StudentCoursesReportView.as_view(), name="student-courses-report")
 ]
