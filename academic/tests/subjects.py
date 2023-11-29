@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from academic.factories import CourseFactory
-from management.serializers import CourseSerializer
+from academic.serializers import CourseSerializer
 from management.factories import FacultyFactory, AssistantFactory
 from authentication.factories import (ItManagerUserFactory, StudentUserFactory, ProfessorUserFactory)
 
@@ -16,50 +16,57 @@ class SubjectViewSetTest(APITestCase):
         course = CourseFactory.build()
         serializer = CourseSerializer(course)
         self.course_data = serializer.data
-        self.course_data["schools"].append(self.school.id)
+        self.course_data["schools"].append(self.school.name)
 
-    def _perform_create_course_request(self, user, expected_status):
+    def _perform_create_course_request(self, user):
         self.client.force_authenticate(user=user)
         url = reverse("academic:subjects-list")
         response = self.client.post(url, self.course_data, format="json")
-        self.assertEqual(response.status_code, expected_status)
+        return response
 
-    def _perform_update_course_request(self, user, expected_status):
+    def _perform_update_course_request(self, user):
         self.client.force_authenticate(user=user)
         payload = {
             "name": "string",
             "credits": 0,
             "type": "general",
             "schools": [
-                self.school.id
+                self.school.name
             ]
         }
         course = CourseFactory.create()
         url = reverse("academic:subjects-detail", kwargs={"pk": course.id})
         response = self.client.patch(url, payload, format="json")
-        self.assertEqual(response.status_code, expected_status)
+        return response
 
     def test_create_course_authorized_it_manager(self):
-        self._perform_create_course_request(self.it_manager_user, status.HTTP_201_CREATED)
+        response = self._perform_create_course_request(self.it_manager_user)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_creat_course_authorized_assistant(self):
-        self._perform_create_course_request(self.assistant.user, status.HTTP_201_CREATED)
+        response = self._perform_create_course_request(self.assistant.user)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_course_unauthorized_student(self):
         student = StudentUserFactory.create()
-        self._perform_create_course_request(student, status.HTTP_403_FORBIDDEN)
+        response = self._perform_create_course_request(student)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_create_course_unauthorized_professor(self):
         professor = ProfessorUserFactory.create()
-        self._perform_create_course_request(professor, status.HTTP_403_FORBIDDEN)
+        response = self._perform_create_course_request(professor)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_student_successful_it_manager(self):
-        self._perform_update_course_request(self.it_manager_user, status.HTTP_200_OK)
+        response = self._perform_update_course_request(self.it_manager_user)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_update_student_successful_assistant(self):
-        self._perform_update_course_request(self.assistant.user, status.HTTP_200_OK)
+        response = self._perform_update_course_request(self.assistant.user)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_update_student_unsuccessful_wrong_assistant(self):
         school = FacultyFactory.create()
         assistant = AssistantFactory.create(school=school)
-        self._perform_update_course_request(assistant.user, status.HTTP_403_FORBIDDEN)
+        response = self._perform_update_course_request(assistant.user)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
