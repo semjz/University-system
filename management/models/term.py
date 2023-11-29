@@ -8,7 +8,8 @@ class Term(models.Model):
     name = models.CharField(max_length=128, unique=True)
     students = models.ManyToManyField(to=Student, blank=True, related_name='terms')
     professors = models.ManyToManyField(to='Professor', blank=True)
-    courses = models.ManyToManyField(to='academic.Course', through='academic.TermCourse', blank=True, related_name='terms')
+    courses = models.ManyToManyField(to='academic.Course', through='academic.TermCourse', blank=True
+                                     , related_name='terms')
     take_course_start_time = models.DateTimeField()
     take_course_end_time = models.DateTimeField()
     class_start_time = models.DateField()
