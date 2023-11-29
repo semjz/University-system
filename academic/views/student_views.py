@@ -9,12 +9,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from academic.models import Course
 from academic.permissions import IsAssistant, IsSameStudent
-from academic.serializers.student import StudentAllowedCoursesSerializer
 from management.models import Student
 from management.filtersets import StudentFilterSet
-from academic.serializers import StudentUpdateStudentSerializer, AssistantUpdateStudentSerializer
+from academic.serializers import (StudentUpdateStudentSerializer, AssistantUpdateStudentSerializer
+, StudentAllowedCoursesSerializer, CourseReportSerializer)
 from management.serializers import RUDStudentSerializer
 
 from rolepermissions.checkers import has_role
@@ -57,19 +56,43 @@ class StudentListRetrieveSet(GenericViewSet
         else:
             serializer.save()
 
-    class StudentAllowedCourses(APIView):
-        permission_classes = (IsAuthenticated, IsSameStudent)
 
-        def get_object(self, pk):
-            try:
-                return Student.objects.get(pk=pk)
-            except Student.DoesNotExist:
-                raise Http404
+class StudentRetrieveApIView(APIView):
 
-        def get(self, request, pk, format=None):
-            student = self.get_object(pk)
-            serializer = StudentAllowedCoursesSerializer(student.courses)
-            return Response(serializer.data)
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self, pk):
+        try:
+            return Student.objects.get(user_id=pk)
+        except Student.DoesNotExist:
+            raise Http404
 
 
+class StudentAllowedCoursesView(StudentRetrieveApIView):
 
+    def get(self, request, pk, format=None):
+        student = self.get_object(pk)
+        available_courses = []
+        major_courses = student.major.courses.all()
+        passed_courses = set(student.passed_courses)
+        for course in major_courses:
+            pre_requisites = set(course.pre_requisites.values_list('id', flat=True))
+            if pre_requisites.issubset(passed_courses):
+                available_courses.append(course)
+        serializer = StudentAllowedCoursesSerializer(available_courses, many=True)
+        return Response(serializer.data)
+
+
+class StudentRemainingTermsView(StudentRetrieveApIView):
+
+    def get(self, request, pk):
+        student = self.get_object(pk)
+        return Response(student.sanavat)
+
+
+class StudentCoursesReportView(StudentRetrieveApIView):
+
+    def get(self, request, pk):
+        student = self.get_object(pk)
+        passed_courses = CourseReportSerializer(student.passed_courses, many=True)
+        return Response(passed_courses.data)
