@@ -19,3 +19,4 @@ drf_spectacular
 django-role-permissions
 factory_boy
 django-guardian
+model_bakery
