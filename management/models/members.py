@@ -23,7 +23,7 @@ class Student(models.Model):
     entrance_year = models.IntegerField()
     entrance_term = models.CharField(choices=ENTRANCE_TERM_CHOICES, max_length=6)
     military_status = models.CharField(choices=MILITARY_STATUS_CHOICES, max_length=20)
-    courses = models.ManyToManyField(to="academic.Course", through="unitselection.Enrollment", blank=True)
+    courses = models.ManyToManyField(to="academic.TermCourse", through="unitselection.Enrollment", blank=True)
     deleted_terms = models.ManyToManyField(to='Term', through='DeleteTerm', blank=True)
 
 
@@ -37,6 +37,15 @@ class Student(models.Model):
     def sanavat(self):
         terms_count = self.terms.filter(student=self).aggregate(term_count=Count('name'))['term_count']
         return terms_count
+
+    @property
+    def passed_courses(self):
+        passed_enrollments = self.enrollments.filter(course_condition=CourseCondition.PASSED)
+        return [enrollment.course.course for enrollment in passed_enrollments]
+
+    @property
+    def current_courses(self):
+        return self.enrollments.filter(course_condition=CourseCondition.IN_PROGRESS).course
 
 
 class Professor(models.Model):

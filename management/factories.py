@@ -1,7 +1,7 @@
 import factory
 from factory.django import DjangoModelFactory
 
-from . import models
+from management.models import *
 from utils.choices import *
 from authentication.factories import StudentUserFactory, AssistantUserFactory, ItManagerUserFactory, \
     ProfessorUserFactory
@@ -9,14 +9,14 @@ from authentication.factories import StudentUserFactory, AssistantUserFactory, I
 
 class FacultyFactory(DjangoModelFactory):
     class Meta:
-        model = models.Faculty
+        model = Faculty
 
     name = factory.Faker("name")
 
 
 class MajorFactory(DjangoModelFactory):
     class Meta:
-        model = models.Major
+        model = Major
 
     name = factory.Faker("name")
     units = 100
@@ -32,7 +32,7 @@ class MajorFactory(DjangoModelFactory):
 
 class StudentFactory(DjangoModelFactory):
     class Meta:
-        model = models.Student
+        model = Student
 
     user = factory.SubFactory(StudentUserFactory, student=None)
     school = factory.SubFactory(FacultyFactory)
@@ -41,10 +41,16 @@ class StudentFactory(DjangoModelFactory):
     entrance_term = factory.Iterator([choice[0] for choice in ENTRANCE_TERM_CHOICES])
     military_status = factory.Iterator([choice[0] for choice in MILITARY_STATUS_CHOICES])
 
+    @factory.post_generation
+    def courses(self, create, extracted, **kwargs):
+        if not create or not extracted:
+            return
+        self.courses.add(*extracted)
+
 
 class AssistantFactory(DjangoModelFactory):
     class Meta:
-        model = models.Assistant
+        model = Assistant
 
     user = factory.SubFactory(AssistantUserFactory, assistant=None)
     school = factory.SubFactory(FacultyFactory)
@@ -53,16 +59,17 @@ class AssistantFactory(DjangoModelFactory):
 
 class ITManagerFactory(DjangoModelFactory):
     class Meta:
-        model = models.ITManager
+        model = ITManager
 
     user = factory.SubFactory(ItManagerUserFactory)
 
 
 class ProfessorFactory(DjangoModelFactory):
     class Meta:
-        model = models.Professor
+        model = Professor
 
     user = factory.SubFactory(ProfessorUserFactory)
     school = factory.SubFactory(FacultyFactory)
     major = factory.SubFactory(MajorFactory)
+
 

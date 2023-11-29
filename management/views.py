@@ -8,7 +8,7 @@ from . import filtersets
 from .filtersets.professor import ProfessorFilter
 from .models import Student, Term, Professor
 from .permissions import IsItManager
-from .serializers import RUDStudentSerializer, CreateStudentSerializer, CourseSerializer
+from .serializers import RUDStudentSerializer, CreateStudentSerializer
 from .serializers.professor import ProfessorSerializer
 from .serializers.term import TermSerializer
 

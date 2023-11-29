@@ -2,7 +2,7 @@ from django.db import models
 
 from academic.models import Course, TermCourse
 from management.models import Term, Student, Professor
-from utils.choices import REQUEST_RESULT_CHOICES, COURSE_CONDITION_CHOICES
+from utils.choices import REQUEST_RESULT_CHOICES, CourseCondition
 
 
 class SelectUnit(models.Model):
@@ -43,13 +43,14 @@ class StudyEnrollmentRequest(models.Model):
 
 
 class Enrollment(models.Model):
+
     student = models.ForeignKey(to=Student, on_delete=models.CASCADE, null=True, blank=True
                                 , related_name="enrollments")
-    course = models.ForeignKey(to=Course, on_delete=models.CASCADE, null=True, blank=True
+    course = models.ForeignKey(to=TermCourse, on_delete=models.CASCADE, null=True, blank=True
                                , related_name="enrollments")
     taken_term = models.ForeignKey(to=Term, on_delete=models.CASCADE, null=True, blank=True
                                    , related_name="enrollments")
-    course_condition = models.CharField(choices=COURSE_CONDITION_CHOICES, max_length=6)
+    course_condition = models.CharField(choices=CourseCondition.choices, max_length=6)
     student_grade = models.IntegerField(null=True, blank=True)
 
 

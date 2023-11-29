@@ -1,2 +1,3 @@
-from .course import CourseSerializer
-from .student import StudentUpdateStudentSerializer, AssistantUpdateStudentSerializer
+from .course import CourseSerializer, CourseReportSerializer, TermCourseSerializer
+from .student import StudentUpdateStudentSerializer, AssistantUpdateStudentSerializer, StudentAllowedCoursesSerializer
+from .enrollment import StudentCoursesReportSerializer

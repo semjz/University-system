@@ -1,2 +1,3 @@
 from .course_views import CourseViewSet, TermCourseViewSet
-from .student_views import StudentListRetrieveSet
+from .student_views import (StudentListRetrieveSet, StudentAllowedCoursesView, StudentRemainingTermsView
+, StudentCoursesReportView)

@@ -1,3 +1,14 @@
+from django.utils.translation import gettext_lazy as _
+
+from django.db import models
+
+
+class CourseCondition(models.TextChoices):
+    PASSED = "passed", _("Passed")
+    IN_PROGRESS = "taken", _("In progress")
+    FAILED = "failed", _("Failed")
+
+
 COURSE_TYPES = [
     ("general", "General"),
     ("specialized", "Specialized"),
@@ -22,9 +33,11 @@ STAGE_CHOICES = [
     ("phd", "PHD"),
 ]
 COURSE_CONDITION_CHOICES = [
-    ("failed", "Failed"),
-    ("passed", "Passed"),
+    {"failed", "Failed"},
+    {"taken", "taken"},
+    {"passed", "Passed"},
 ]
+
 
 PROFESSOR_RANK_CHOICES = [
     ('instructor', 'Instructor'),  # morabi
