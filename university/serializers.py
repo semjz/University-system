@@ -5,7 +5,7 @@ from authentication.serializers import CreateUserSerializer
 import string
 import secrets
 from rest_framework import serializers
-from .models import ITManager
+from .models import School
 
 User = get_user_model()
 
@@ -32,7 +32,7 @@ class CreatStudentSerializer(serializers.ModelSerializer):
         return student
 
 
-class ITmanagerSerializer(serializers.ModelSerializer):
+class SchoolSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ITManager
+        model = School
         fields = '__all__'
