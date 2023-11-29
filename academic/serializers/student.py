@@ -18,7 +18,7 @@ class StudentUpdateStudentSerializer(AssistantUpdateStudentSerializer):
     user = StudentUpdateUserSerializer()
 
 
-class StudentAllowedCoursesSerializer(serializers.Serializer):
+class StudentAllowedCoursesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ("name", "credits", "type")
