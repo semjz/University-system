@@ -10,9 +10,9 @@ from management.models import Faculty
 class IsCourseAssistant(permissions.BasePermission):
 
     def has_permission(self, request, view):
-        school_ids = request.data["schools"]
-        for school_id in school_ids:
-            school = Faculty.objects.get(id=school_id)
+        school_names = request.data["schools"]
+        for school_name in school_names:
+            school = Faculty.objects.get(name=school_name)
             if request.user.id != school.assistant.user_id:
                 return False
         return True
