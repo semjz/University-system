@@ -1,21 +1,22 @@
-from rest_framework import mixins, filters
+from rest_framework import mixins
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 from rolepermissions.checkers import has_role
+from django_filters import rest_framework as filters
 
 from academic.permissions import IsAssistant,IsSameProfessor
 from academic.serializers import AssistantUpdateProfessorSerializer,ProfessorUpdateProfessorSerializer
 from authentication.roles import AssistantRole
 from management.filtersets import ProfessorFilter
 from management.models import Professor
-from management.serializers import ProfessorSerializer
+from management.serializers import CreateProfessorSerializer
 
 
 class ProfessorListRetrieveSet(GenericViewSet
-                             , mixins.ListModelMixin
-                             , mixins.RetrieveModelMixin
-                             , mixins.UpdateModelMixin):
+                               , mixins.ListModelMixin
+                               , mixins.RetrieveModelMixin
+                               , mixins.UpdateModelMixin):
     queryset = Professor.objects.all()
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = ProfessorFilter
@@ -29,7 +30,7 @@ class ProfessorListRetrieveSet(GenericViewSet
                 return ProfessorUpdateProfessorSerializer
 
         else:
-            return ProfessorSerializer
+            return CreateProfessorSerializer
 
     def get_permissions(self):
         if self.action in ["update", "partial_update", "retrieve"]:
