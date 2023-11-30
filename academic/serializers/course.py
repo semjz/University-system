@@ -12,8 +12,7 @@ class CourseSerializer(serializers.ModelSerializer):
                                                   , required=False)
     co_requisites = serializers.SlugRelatedField(queryset=Course.objects.all(), slug_field="name", many=True
                                                  , required=False)
-    schools = serializers.SlugRelatedField(queryset=Faculty.objects.all(), slug_field="name", many=True
-                                           , required=False)
+    schools = serializers.SlugRelatedField(queryset=Faculty.objects.all(), slug_field="name", many=True)
 
     class Meta:
         model = Course
@@ -33,13 +32,15 @@ class TermCourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TermCourse
-        fields = ['class_date_time', 'exam_date_time', 'exam_site', 'capacity', 'course', 'term']
+        fields = "__all__"
 
     def validate(self, data):
         now_time = datetime.datetime.now()
-        if data["end_term_time"] > now_time > data["fix_course_end_time"]:
+        term_end_time = datetime.datetime.combine(data["term"].term_end_time, datetime.datetime.min.time())
+        if term_end_time > now_time > data["fix_course_end_time"]:
             raise serializers.ValidationError("Can't create a term course after Add/drop time end time "
                                               "until the end of current term")
+        return data
 
 
 
