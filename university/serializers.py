@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Student
+from .models import Student,Professor
 from authentication.serializers import CreateUserSerializer
 import string
 import secrets
@@ -36,3 +36,15 @@ class SchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = School
         fields = '__all__'
+
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = '__all__'
+        read_only_fields = ('student_id',)
+
+class ProfessorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Professor
+        fields = '__all__'
+        read_only_fields = ('professor_id',)
