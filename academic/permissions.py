@@ -3,7 +3,7 @@ import datetime
 from rest_framework import permissions
 from rolepermissions.checkers import has_role
 
-from authentication.roles import AssistantRole, StudentRole
+from authentication.roles import AssistantRole, StudentRole, ProfessorRole
 from management.models import Faculty
 
 
@@ -38,6 +38,15 @@ class IsSameStudent(permissions.BasePermission):
 
     def has_permission(self, request, view):
         return has_role(request.user, StudentRole)
+
+    def has_object_permission(self, request, view, obj):
+        return request.user.id == obj.user_id
+
+
+class IsSameProfessor(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        return has_role(request.user, ProfessorRole)
 
     def has_object_permission(self, request, view, obj):
         return request.user.id == obj.user_id
