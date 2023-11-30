@@ -20,7 +20,8 @@ class CreateStudentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Student
-        fields = ["user", "major", "school", "entrance_year", "entrance_term"]
+        fields = ["user_id", "user", "major", "school", "entrance_year", "entrance_term"]
+        read_only_fields = ("user_id",)
 
     def create(self, validated_data):
         user_data = validated_data.pop("user")
