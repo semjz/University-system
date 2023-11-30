@@ -1,4 +1,4 @@
 from .course import CourseSerializer, CourseReportSerializer, TermCourseSerializer
 from .student import StudentUpdateStudentSerializer, AssistantUpdateStudentSerializer, StudentAllowedCoursesSerializer
 from .enrollment import StudentCoursesReportSerializer
-from .Profssor import ProfessorUpdateProfessorSerializer,AssistantUpdateProfessorSerializer
+from .professor import ProfessorUpdateProfessorSerializer,AssistantUpdateProfessorSerializer
