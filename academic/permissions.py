@@ -18,6 +18,16 @@ class IsCourseAssistant(permissions.BasePermission):
         return True
 
 
+class IsTermCourseAssistant(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        course = request.data["course"]
+        for school in course.schools:
+            if request.user.id != school.assistant.user_id:
+                return False
+        return True
+
+
 class IsAssistant(permissions.BasePermission):
 
     def has_permission(self, request, view):
