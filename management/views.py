@@ -6,9 +6,9 @@ from rest_framework.permissions import IsAuthenticated
 
 from . import filtersets
 from .filtersets.professor import ProfessorFilter
-from .models import Student, Term, Professor
+from .models import Student, Term, Professor, Faculty
 from .permissions import IsItManager
-from .serializers import RUDStudentSerializer, CreateStudentSerializer
+from .serializers import RUDStudentSerializer, CreateStudentSerializer, FacultySerializer
 from .serializers.professor import ProfessorSerializer
 from .serializers.term import TermSerializer
 
@@ -47,3 +47,9 @@ class ITManagerProfessorViewSet(viewsets.ModelViewSet):
     filterset_class = ProfessorFilter
 
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
+
+
+class ITManagerFacultyViewSet(viewsets.ModelViewSet):
+    queryset = Faculty.objects.all()
+    serializer_class = FacultySerializer
+    http_method_names = ["get", "post", "put", "delete"]
