@@ -14,6 +14,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.hashers import check_password
 
 
 User = get_user_model()
@@ -69,10 +70,13 @@ class PasswordResetAction(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         reset_token = serializer.validated_data["reset_token"]
         if not cache.get(reset_token):
-            return Response("reset token is wrong or expired!", status=status.HTTP_400_BAD_REQUEST)
+            return Response("reset token is wrong or expired!", status.HTTP_400_BAD_REQUEST)
         else:
             user_id = cache.get(reset_token)
             user = get_object_or_404(User, user_id=user_id)
+            new_pass = serializer.validated_data["new_pass"]
+            if check_password(new_pass, user.password):
+                return Response("New password is same as current password!", status.HTTP_400_BAD_REQUEST)
             user.set_password(serializer.validated_data["new_pass"])
             user.save()
             return Response("password was changed successfully", status.HTTP_200_OK)

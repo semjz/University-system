@@ -11,9 +11,9 @@ class ChangePasswordRequestSerializer(serializers.Serializer):
 
 
 class ChangePasswordActionSerializer(serializers.Serializer):
+    reset_token = serializers.CharField(max_length=50, required=True)
     new_pass = serializers.CharField(required=True, validators=[validate_password])
     confirm_new_pass = serializers.CharField(required=True)
-    reset_token = serializers.CharField(max_length=50, required=True)
 
     def validate_reset_token(self, reset_token):
         if not reset_token:
