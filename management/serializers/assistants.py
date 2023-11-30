@@ -56,4 +56,3 @@ class UpdateTeachingAssistantSerializer(serializers.ModelSerializer):
         user_instance.save()
 
         return instance
-
