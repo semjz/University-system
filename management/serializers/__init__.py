@@ -1,4 +1,4 @@
 from .student import CreateStudentSerializer, RUDStudentSerializer
 from .term import TermSerializer
-from .professor import ProfessorSerializer
+from .professor import CreateProfessorSerializer
 from .Faculty import FacultySerializer

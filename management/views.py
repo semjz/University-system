@@ -9,7 +9,7 @@ from .filtersets.professor import ProfessorFilter
 from .models import Student, Term, Professor, Faculty
 from .permissions import IsItManager
 from .serializers import RUDStudentSerializer, CreateStudentSerializer, FacultySerializer
-from .serializers.professor import ProfessorSerializer
+from .serializers.professor import CreateProfessorSerializer, RUDProfessorSerializer
 from .serializers.term import TermSerializer
 
 
@@ -41,12 +41,21 @@ class ITManagerTermViewSet(viewsets.ModelViewSet):
 
 class ITManagerProfessorViewSet(viewsets.ModelViewSet):
     queryset = Professor.objects.all()
-    serializer_class = ProfessorSerializer
+    serializer_class = CreateProfessorSerializer
     permission_classes = [IsAuthenticated, IsItManager]
     filter_backends = [DjangoFilterBackend]
     filterset_class = ProfessorFilter
 
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
+
+    def perform_destroy(self, instance):
+        instance.user.delete()
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return CreateProfessorSerializer
+        else:
+            return RUDProfessorSerializer
 
 
 class ITManagerFacultyViewSet(viewsets.ModelViewSet):

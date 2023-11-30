@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from management.models.members import Professor
-from authentication.serializers import CreateUserSerializer
+from authentication.serializers import CreateUserSerializer, FullUpdateUserSerializer
 import string
 import secrets
 
@@ -13,7 +13,7 @@ def create_professor_id():
     return unique_id
 
 
-class ProfessorSerializer(serializers.ModelSerializer):
+class CreateProfessorSerializer(serializers.ModelSerializer):
     user = CreateUserSerializer()
 
     class Meta:
@@ -27,3 +27,25 @@ class ProfessorSerializer(serializers.ModelSerializer):
         validated_data['user'] = user
         return super().create(validated_data)
 
+
+class RUDProfessorSerializer(serializers.ModelSerializer):
+    user = FullUpdateUserSerializer()
+
+    class Meta:
+        model = Professor
+        fields = "__all__"
+
+    def update(self, instance, validated_data):
+        if validated_data.get("user"):
+            user_data = validated_data.pop("user")
+
+            user_instance = instance.user
+            for field, value in user_data.items():
+                if field == "password":
+                    instance.password = user_instance.set_password(value)
+                else:
+                    setattr(user_instance, field, value)
+
+            user_instance.save()
+
+        return super().update(instance, validated_data)
