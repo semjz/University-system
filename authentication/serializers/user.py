@@ -29,7 +29,7 @@ class FullUpdateUserSerializer(serializers.ModelSerializer):
         return instance
 
 
-class StudentUpdateUserSerializer(FullUpdateUserSerializer):
+class RestrictUpdateUserSerializer(FullUpdateUserSerializer):
     class Meta:
         model = User
         fields = ["first_name", "last_name", "national_code", "phone_number", "email", "gender", "birth_date"]
