@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from .views import (CourseViewSet, TermCourseViewSet, StudentListRetrieveSet, StudentAllowedCoursesView
-, StudentRemainingTermsView, StudentCoursesReportView,ProfessorListRetrieveSet)
+, StudentRemainingTermsView, StudentCoursesReportView, ProfessorListRetrieveSet)
 
 app_name = "academic"
 router = DefaultRouter()
