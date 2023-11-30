@@ -10,7 +10,7 @@ class FullUpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["user_id", "first_name", "last_name", "national_code", "phone_number", "email"
-            , "gender", "birth_date"]
+                    , "gender", "birth_date"]
 
     def validate_national_code(self, national_code):
         if not national_code.isnumeric():

@@ -25,18 +25,18 @@ class Student(models.Model):
     military_status = models.CharField(choices=MILITARY_STATUS_CHOICES, max_length=20)
     courses = models.ManyToManyField(to="academic.TermCourse", through="unitselection.Enrollment", blank=True)
     deleted_terms = models.ManyToManyField(to='Term', through='DeleteTerm', blank=True)
+    max_term = models.IntegerField(default=12)
 
 
     @property
     def average_grade(self):
-        enrollments = self.courses.get(student=self)
-        average_grade = enrollments.aggregate(Avg("student_grade"))['student_grade__avg']
+        average_grade = self.enrollments.get(student=self).aggregate(Avg("student_grade"))['student_grade__avg']
         return average_grade
 
     @property
     def sanavat(self):
         terms_count = self.terms.filter(student=self).aggregate(term_count=Count('name'))['term_count']
-        return terms_count
+        return 12 - terms_count
 
     @property
     def passed_courses(self):
