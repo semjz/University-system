@@ -2,7 +2,6 @@ from django.http import Http404
 from django_filters import rest_framework as filters
 from rest_framework import mixins
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.generics import RetrieveAPIView
 from rest_framework.views import APIView
 
 from rest_framework.permissions import IsAuthenticated

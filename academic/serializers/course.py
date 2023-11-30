@@ -16,7 +16,8 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        exclude = ("id",)
+        fields = "__all__"
+        read_only_fields = ("id",)
 
 
 class CourseReportSerializer(serializers.ModelSerializer):
@@ -36,10 +37,11 @@ class TermCourseSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         now_time = datetime.datetime.now()
-        term_end_time = datetime.datetime.combine(data["term"].term_end_time, datetime.datetime.min.time())
-        if term_end_time > now_time > data["fix_course_end_time"]:
-            raise serializers.ValidationError("Can't create a term course after Add/drop time end time "
-                                              "until the end of current term")
+        if data.get("term"):
+            term_end_time = datetime.datetime.combine(data["term"].term_end_time, datetime.datetime.min.time())
+            if term_end_time > now_time > data["fix_course_end_time"]:
+                raise serializers.ValidationError("Can't create a term course after Add/drop time end time "
+                                                  "until the end of current term")
         return data
 
 

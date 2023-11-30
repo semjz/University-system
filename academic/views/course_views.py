@@ -4,7 +4,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 
 from academic import filtersets
-from academic.models import Course
+from academic.models import Course, TermCourse
 from academic.permissions import IsCourseAssistant, IsTermCourseAssistant
 from academic.serializers import CourseSerializer
 from academic.serializers.course import TermCourseSerializer
@@ -27,10 +27,15 @@ class CourseViewSet(viewsets.ModelViewSet):
 
 
 class TermCourseViewSet(viewsets.ModelViewSet):
-    queryset = Course.objects.all()
+    queryset = TermCourse.objects.all()
     serializer_class = TermCourseSerializer
-    permission_classes = [IsItManager | IsTermCourseAssistant]
     pagination_class = PageNumberPagination
+
+    def get_permissions(self):
+        if self.action in ["list", "retrieve"]:
+            return (IsAuthenticated(),)
+        else:
+            return ((IsItManager | IsTermCourseAssistant)(),)
 
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
 
