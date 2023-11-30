@@ -7,6 +7,7 @@ from .serializers import CreatStudentSerializer
 ##
 from rest_framework import viewsets
 from .serializers import SchoolSerializer
+from .models import School
 
 from rest_framework.permissions import IsAdminUser
 from rest_framework.viewsets import ModelViewSet
@@ -26,7 +27,7 @@ class CreatStudent(CreateAPIView):
 
 #alikh
 class SchoolViewSet(viewsets.ModelViewSet):
-    queryset = Student.objects.all()
+    queryset = School.objects.all()
     serializer_class = SchoolSerializer
     http_method_names = ["get", "post", "put", "delete"]
 
